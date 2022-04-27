@@ -1,4 +1,7 @@
 import asyncio
+
+from grpclib.reflection.service import ServerReflection
+
 import account
 from grpclib.server import Server
 from typing import AsyncIterator
@@ -43,7 +46,9 @@ class AccountService(account.AccountBase):
 
 
 async def main():
-    server = Server([AccountService()])
+    services = [AccountService()]
+    services = ServerReflection.extend(services)
+    server = Server(services)
     await server.start("127.0.0.1", 50051)
     await server.wait_closed()
 
