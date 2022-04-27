@@ -2,13 +2,19 @@ import asyncio
 import uuid
 from datetime import datetime
 
+import betterproto
+import grpc
+import grpclib
 from dateutil.tz import UTC
 from grpclib.reflection.service import ServerReflection
 from grpclib.server import Server
 
 from bulb.tariff import TariffServiceBase, Tariff, ListTariffsResponse, BatchGetTariffsResponse, \
-    PaymentMethod, TariffType, PublicationStatus, TariffFeatures, Interval
+    PaymentMethod, TariffType, PublicationStatus, TariffFeatures, Interval, GetTariffRequest
 from betterproto.lib.google.protobuf import FieldMask
+
+import tariff_pb2  # imported for side-effects only
+
 
 # Tariff(
 #     id="",
@@ -39,6 +45,7 @@ TARIFFS = {
             rate_start_times=["02:00", "06:00"],
             standing_charge_interval=Interval.DAILY,
         ),
+        blah=2001,
     ),
     TARIFF_ID_2: Tariff(
         id=TARIFF_ID_2,
@@ -52,6 +59,7 @@ TARIFFS = {
             # rate_start_times=[],
             standing_charge_interval=Interval.DAILY,
         ),
+        blah=2002,
     ),
 }
 
@@ -67,15 +75,34 @@ class TariffService(TariffServiceBase):
             fuel_types: list[str] | None,
             tariff_types: list[str] | None,
     ) -> BatchGetTariffsResponse:
-        ...
+        print(ids)
+        print(references)
+        print(fuel_types)
+        print(tariff_types)
+        return BatchGetTariffsResponse([])
 
     async def get_tariff(self, id: str) -> Tariff:
-        return TARIFFS[id]
+        try:
+            return TARIFFS[id]
+        except Exception:
+            raise grpclib.GRPCError(message=f"Cannot find {id}", status=grpclib.const.Status.NOT_FOUND)
 
     async def update_tariff(
-        self, tariff: Tariff, update_mask: FieldMask
+        self,
+        tariff: Tariff,
+        # update_mask: FieldMask
     ) -> Tariff:
-        ...
+        # TODO: investigate using FieldMask for update methods
+        #  betterproto doesn't have a "MergeMessage" implementation at present to make FieldMask useful
+        # the base google.protobuf FieldMask implementation:
+        # from google.protobuf.field_mask_pb2 import FieldMask
+        if tariff.id not in TARIFFS:
+            raise grpclib.GRPCError(message=f"Cannot find {id}", status=grpclib.const.Status.NOT_FOUND)
+        TARIFFS[tariff.id] = tariff
+        return tariff
+
+
+
 
 
 async def main():

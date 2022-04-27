@@ -1,12 +1,12 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/field_mask.proto";
+//import "google/protobuf/field_mask.proto";
 
 package bulb.tariff;
 
 service TariffService {
-  rpc ListTariffs (ListTariffsRequest) returns (ListTariffsResponse) {}))
+  rpc ListTariffs (ListTariffsRequest) returns (ListTariffsResponse) {}
   rpc BatchGetTariffs (BatchGetTariffsRequest) returns (BatchGetTariffsResponse) {}
   rpc GetTariff (GetTariffRequest) returns (Tariff) {}
   rpc UpdateTariff (UpdateTariffRequest) returns (Tariff) {}
@@ -44,7 +44,7 @@ message GetTariffRequest {
 
 message UpdateTariffRequest {
   Tariff tariff = 1;
-  google.protobuf.FieldMask update_mask = 2;
+//  google.protobuf.FieldMask update_mask = 2;
 }
 
 
@@ -96,6 +96,7 @@ message Tariff {
   optional google.protobuf.Timestamp available_to = 8;
   // a description of features enabled for the tariff
   TariffFeatures features = 9;
+  int64 blah = 10;
 }
 
 enum Interval {
