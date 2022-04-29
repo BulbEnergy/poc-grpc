@@ -1,9 +1,0 @@
-grpcio
-grpcio-tools
-mypy
-types-protobuf
-mypy-protobuf
-grpc-stubs
-pydantic
-
-black

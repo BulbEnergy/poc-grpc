@@ -3,7 +3,7 @@
 # plugin: python-betterproto
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import AsyncIterable, AsyncIterator, Dict, Iterable, List, Optional, Union
 
 import betterproto
 from betterproto.grpc.grpclib_server import ServiceBase
@@ -47,16 +47,6 @@ class Unit(betterproto.Enum):
 
 
 @dataclass(eq=False, repr=False)
-class Ids(betterproto.Message):
-    ids: List[str] = betterproto.string_field(1)
-
-
-@dataclass(eq=False, repr=False)
-class References(betterproto.Message):
-    references: List[str] = betterproto.string_field(1)
-
-
-@dataclass(eq=False, repr=False)
 class ListTariffsRequest(betterproto.Message):
     pass
 
@@ -68,10 +58,9 @@ class ListTariffsResponse(betterproto.Message):
 
 @dataclass(eq=False, repr=False)
 class BatchGetTariffsRequest(betterproto.Message):
-    ids: List[str] = betterproto.string_field(1)
-    references: List[str] = betterproto.string_field(2)
+    tariff_ids: List[str] = betterproto.string_field(1)
     fuel_types: List[str] = betterproto.string_field(3)
-    tariff_types: List[str] = betterproto.string_field(4)
+    tariff_types: List["TariffType"] = betterproto.enum_field(4)
 
 
 @dataclass(eq=False, repr=False)
@@ -81,7 +70,7 @@ class BatchGetTariffsResponse(betterproto.Message):
 
 @dataclass(eq=False, repr=False)
 class GetTariffRequest(betterproto.Message):
-    id: str = betterproto.string_field(1)
+    tariff_id: str = betterproto.string_field(1)
 
 
 @dataclass(eq=False, repr=False)
@@ -90,10 +79,23 @@ class UpdateTariffRequest(betterproto.Message):
 
 
 @dataclass(eq=False, repr=False)
+class GetRatesForTariffRequest(betterproto.Message):
+    tariff_id: str = betterproto.string_field(1)
+    fuel_types: List["FuelType"] = betterproto.enum_field(2)
+    region_codes: List[str] = betterproto.string_field(3)
+
+
+@dataclass(eq=False, repr=False)
+class PriceChangeTariffPricePack(betterproto.Message):
+    price_change_id: str = betterproto.string_field(1)
+    tariff_id: str = betterproto.string_field(2)
+    price_pack: "PricePack" = betterproto.message_field(3)
+
+
+@dataclass(eq=False, repr=False)
 class Tariff(betterproto.Message):
-    # the unique short code for the tariff (cannot be changed) TODO work out how
-    # this interacts with multiple Junifer tariffs -> one Iris tariff
-    id: str = betterproto.string_field(1)
+    # the UUID of the tariff
+    tariff_id: str = betterproto.string_field(1)
     # the human-readable name for the tariff (can change)
     name: str = betterproto.string_field(2)
     # which fuel types this tariff is applicable to (it will have prices for
@@ -114,7 +116,6 @@ class Tariff(betterproto.Message):
     )
     # a description of features enabled for the tariff
     features: "TariffFeatures" = betterproto.message_field(9)
-    blah: int = betterproto.int64_field(10)
 
 
 @dataclass(eq=False, repr=False)
@@ -127,50 +128,31 @@ class TariffFeatures(betterproto.Message):
 
 
 @dataclass(eq=False, repr=False)
-class TariffRegion(betterproto.Message):
-    """The pricing of a Tariff in a particular region."""
-
-    # in UK this is a GSP group
-    region_name: str = betterproto.string_field(1)
-    # the map of FuelTypes to lists of PricePacks (can't use map<...> because of
-    # enum and repeated)
-    price_packs_for_fuel: "PricePacksForFuel" = betterproto.message_field(2)
-
-
-@dataclass(eq=False, repr=False)
-class PricePacksForFuel(betterproto.Message):
-    # which fuel type the PricePacks are for
-    fuel_type: "FuelType" = betterproto.enum_field(1)
-    # all the prices for a region and fuel (PricePacks contain when they apply
-    # from)
-    price_packs: List["PricePack"] = betterproto.message_field(2)
-    # Which Junifer tariffs are encompassed by this tariff-region-fuel?? TODO
-    # sanity check
-    legacy_references: List[str] = betterproto.string_field(3)
-
-
-@dataclass(eq=False, repr=False)
 class PricePack(betterproto.Message):
     """
     Prices for a single region and fuel type, starting from a date. A PricePack
     is flexible and requires validation to 'fit' in a tariff.
     """
 
+    # in UK this is a GSP group
+    region_code: str = betterproto.string_field(1)
+    # which fuel type these are prices for
+    fuel_type: "FuelType" = betterproto.enum_field(2)
     # when these prices starts affecting existing members
-    existing_members_effective_at: datetime = betterproto.message_field(1)
+    existing_members_effective_at: datetime = betterproto.message_field(3)
     # when these prices starts affecting new members
-    new_members_effective_at: datetime = betterproto.message_field(2)
+    new_members_effective_at: datetime = betterproto.message_field(4)
     # the price of energy for each time interval described in TariffFeatures in
     # order, e.g. if the rate_start_times are ['02:00', '06:00'] - there are
     # exactly two unit_rates - the first unit_rates item is the price for
     # 02:00-06:00 - the second unit_rates item is the price for 06:00-02:00
-    unit_rates: List["UnitRate"] = betterproto.message_field(3)
+    unit_rates: List["UnitRate"] = betterproto.message_field(5)
     # the standing charge that applies to every meter this tariff covers (if we
     # discover we want multiple StandingCharges we can change this to 'repeated'
     # without breaking wire compatibility but old clients would only 'see' the
     # last one in the list)
-    standing_charges: Optional["StandingCharge"] = betterproto.message_field(
-        4, optional=True, group="_standing_charges"
+    standing_charge: Optional["StandingCharge"] = betterproto.message_field(
+        6, optional=True, group="_standing_charge"
     )
 
 
@@ -185,12 +167,6 @@ class UnitRate(betterproto.Message):
     start_time: Optional[str] = betterproto.string_field(
         3, optional=True, group="_start_time"
     )
-    # empty for single rate, otherwise when in the day the rate stops applying
-    # (this can be 'before' start_time, in which case it wraps around midnight)
-    # e.g. '06:00'
-    end_time: Optional[str] = betterproto.string_field(
-        4, optional=True, group="_end_time"
-    )
 
 
 @dataclass(eq=False, repr=False)
@@ -203,54 +179,37 @@ class StandingCharge(betterproto.Message):
 
 @dataclass(eq=False, repr=False)
 class PriceChange(betterproto.Message):
+    # the UUID of the price change
+    price_change_id: str = betterproto.string_field(1)
     # when the price change was created
-    created_at: datetime = betterproto.message_field(1)
+    created_at: datetime = betterproto.message_field(2)
     # when the price changes (if published) starts affecting existing members
-    existing_members_effective_at: datetime = betterproto.message_field(2)
+    existing_members_effective_at: datetime = betterproto.message_field(3)
     # when the price changes (if published) starts affecting new members
-    new_members_effective_at: datetime = betterproto.message_field(3)
+    new_members_effective_at: datetime = betterproto.message_field(4)
     # when the price change was published (if it hasn't got a published_at, it's
     # in draft)
     published_at: Optional[datetime] = betterproto.message_field(
-        4, optional=True, group="_published_at"
+        5, optional=True, group="_published_at"
     )
-    # TODO something something actions/approval how much progress has been made
-    # with applying the published price change
-    orchestration_steps: "OrchestrationSteps" = betterproto.message_field(5)
-    # all the actual new pricing information TODO try to name this better
-    price_changes_by_tariff_region: List[
-        "PriceChangeTariffRegion"
-    ] = betterproto.message_field(6)
+    # what reviews have been requested and their status
+    reviews: List["Review"] = betterproto.message_field(6)
+    # how much progress has been made with applying the published price change
+    orchestration_steps: "OrchestrationSteps" = betterproto.message_field(7)
+
+
+@dataclass(eq=False, repr=False)
+class Review(betterproto.Message):
+    reviewer: str = betterproto.string_field(1)
+    approved: bool = betterproto.bool_field(2)
 
 
 @dataclass(eq=False, repr=False)
 class OrchestrationSteps(betterproto.Message):
-    """TODO decide if we even want to have anything for this yet"""
-
     junifer_updated: bool = betterproto.bool_field(1)
     pcws_updated: bool = betterproto.bool_field(2)
     comms_sent: bool = betterproto.bool_field(3)
     pay_review_completed: bool = betterproto.bool_field(4)
-
-
-@dataclass(eq=False, repr=False)
-class PriceChangeTariffRegion(betterproto.Message):
-    """TODO decide if this should have more hierarchy"""
-
-    # the unique short code of a tariff
-    tariff_id: str = betterproto.string_field(1)
-    # in UK this is a GSP group
-    region_name: str = betterproto.string_field(2)
-    # the map of FuelTypes to new PricePacks
-    price_packs_for_fuel: List["PricePacksForFuel"] = betterproto.message_field(3)
-
-
-@dataclass(eq=False, repr=False)
-class PricePackForFuel(betterproto.Message):
-    # which fuel type the PricePack is for
-    fuel_type: "FuelType" = betterproto.enum_field(1)
-    # the new price for the region and fuel
-    price_packs: List["PricePack"] = betterproto.message_field(2)
 
 
 class TariffServiceStub(betterproto.ServiceStub):
@@ -259,41 +218,38 @@ class TariffServiceStub(betterproto.ServiceStub):
         request = ListTariffsRequest()
 
         return await self._unary_unary(
-            "/bulb.tariff.TariffService/ListTariffs", request, ListTariffsResponse
+            "/bulb.tariff.v1.TariffService/ListTariffs", request, ListTariffsResponse
         )
 
     async def batch_get_tariffs(
         self,
         *,
-        ids: Optional[List[str]] = None,
-        references: Optional[List[str]] = None,
+        tariff_ids: Optional[List[str]] = None,
         fuel_types: Optional[List[str]] = None,
-        tariff_types: Optional[List[str]] = None
+        tariff_types: Optional[List["TariffType"]] = None
     ) -> "BatchGetTariffsResponse":
-        ids = ids or []
-        references = references or []
+        tariff_ids = tariff_ids or []
         fuel_types = fuel_types or []
         tariff_types = tariff_types or []
 
         request = BatchGetTariffsRequest()
-        request.ids = ids
-        request.references = references
+        request.tariff_ids = tariff_ids
         request.fuel_types = fuel_types
         request.tariff_types = tariff_types
 
         return await self._unary_unary(
-            "/bulb.tariff.TariffService/BatchGetTariffs",
+            "/bulb.tariff.v1.TariffService/BatchGetTariffs",
             request,
             BatchGetTariffsResponse,
         )
 
-    async def get_tariff(self, *, id: str = "") -> "Tariff":
+    async def get_tariff(self, *, tariff_id: str = "") -> "Tariff":
 
         request = GetTariffRequest()
-        request.id = id
+        request.tariff_id = tariff_id
 
         return await self._unary_unary(
-            "/bulb.tariff.TariffService/GetTariff", request, Tariff
+            "/bulb.tariff.v1.TariffService/GetTariff", request, Tariff
         )
 
     async def update_tariff(self, *, tariff: "Tariff" = None) -> "Tariff":
@@ -303,7 +259,44 @@ class TariffServiceStub(betterproto.ServiceStub):
             request.tariff = tariff
 
         return await self._unary_unary(
-            "/bulb.tariff.TariffService/UpdateTariff", request, Tariff
+            "/bulb.tariff.v1.TariffService/UpdateTariff", request, Tariff
+        )
+
+    async def stream_rates_for_tariff(
+        self,
+        *,
+        tariff_id: str = "",
+        fuel_types: Optional[List["FuelType"]] = None,
+        region_codes: Optional[List[str]] = None
+    ) -> AsyncIterator["PricePack"]:
+        fuel_types = fuel_types or []
+        region_codes = region_codes or []
+
+        request = GetRatesForTariffRequest()
+        request.tariff_id = tariff_id
+        request.fuel_types = fuel_types
+        request.region_codes = region_codes
+
+        async for response in self._unary_stream(
+            "/bulb.tariff.v1.TariffService/StreamRatesForTariff",
+            request,
+            PricePack,
+        ):
+            yield response
+
+    async def stream_update_rates_for_price_change(
+        self,
+        request_iterator: Union[
+            AsyncIterable["PriceChangeTariffPricePack"],
+            Iterable["PriceChangeTariffPricePack"],
+        ],
+    ) -> "betterproto_lib_google_protobuf.Empty":
+
+        return await self._stream_unary(
+            "/bulb.tariff.v1.TariffService/StreamUpdateRatesForPriceChange",
+            request_iterator,
+            PriceChangeTariffPricePack,
+            betterproto_lib_google_protobuf.Empty,
         )
 
 
@@ -313,17 +306,29 @@ class TariffServiceBase(ServiceBase):
 
     async def batch_get_tariffs(
         self,
-        ids: Optional[List[str]],
-        references: Optional[List[str]],
+        tariff_ids: Optional[List[str]],
         fuel_types: Optional[List[str]],
-        tariff_types: Optional[List[str]],
+        tariff_types: Optional[List["TariffType"]],
     ) -> "BatchGetTariffsResponse":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
 
-    async def get_tariff(self, id: str) -> "Tariff":
+    async def get_tariff(self, tariff_id: str) -> "Tariff":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
 
     async def update_tariff(self, tariff: "Tariff") -> "Tariff":
+        raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
+
+    async def stream_rates_for_tariff(
+        self,
+        tariff_id: str,
+        fuel_types: Optional[List["FuelType"]],
+        region_codes: Optional[List[str]],
+    ) -> AsyncIterator["PricePack"]:
+        raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
+
+    async def stream_update_rates_for_price_change(
+        self, request_iterator: AsyncIterator["PriceChangeTariffPricePack"]
+    ) -> "betterproto_lib_google_protobuf.Empty":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
 
     async def __rpc_list_tariffs(self, stream: grpclib.server.Stream) -> None:
@@ -338,8 +343,7 @@ class TariffServiceBase(ServiceBase):
         request = await stream.recv_message()
 
         request_kwargs = {
-            "ids": request.ids,
-            "references": request.references,
+            "tariff_ids": request.tariff_ids,
             "fuel_types": request.fuel_types,
             "tariff_types": request.tariff_types,
         }
@@ -351,7 +355,7 @@ class TariffServiceBase(ServiceBase):
         request = await stream.recv_message()
 
         request_kwargs = {
-            "id": request.id,
+            "tariff_id": request.tariff_id,
         }
 
         response = await self.get_tariff(**request_kwargs)
@@ -367,30 +371,70 @@ class TariffServiceBase(ServiceBase):
         response = await self.update_tariff(**request_kwargs)
         await stream.send_message(response)
 
+    async def __rpc_stream_rates_for_tariff(
+        self, stream: grpclib.server.Stream
+    ) -> None:
+        request = await stream.recv_message()
+
+        request_kwargs = {
+            "tariff_id": request.tariff_id,
+            "fuel_types": request.fuel_types,
+            "region_codes": request.region_codes,
+        }
+
+        await self._call_rpc_handler_server_stream(
+            self.stream_rates_for_tariff,
+            stream,
+            request_kwargs,
+        )
+
+    async def __rpc_stream_update_rates_for_price_change(
+        self, stream: grpclib.server.Stream
+    ) -> None:
+        request_kwargs = {"request_iterator": stream.__aiter__()}
+
+        response = await self.stream_update_rates_for_price_change(**request_kwargs)
+        await stream.send_message(response)
+
     def __mapping__(self) -> Dict[str, grpclib.const.Handler]:
         return {
-            "/bulb.tariff.TariffService/ListTariffs": grpclib.const.Handler(
+            "/bulb.tariff.v1.TariffService/ListTariffs": grpclib.const.Handler(
                 self.__rpc_list_tariffs,
                 grpclib.const.Cardinality.UNARY_UNARY,
                 ListTariffsRequest,
                 ListTariffsResponse,
             ),
-            "/bulb.tariff.TariffService/BatchGetTariffs": grpclib.const.Handler(
+            "/bulb.tariff.v1.TariffService/BatchGetTariffs": grpclib.const.Handler(
                 self.__rpc_batch_get_tariffs,
                 grpclib.const.Cardinality.UNARY_UNARY,
                 BatchGetTariffsRequest,
                 BatchGetTariffsResponse,
             ),
-            "/bulb.tariff.TariffService/GetTariff": grpclib.const.Handler(
+            "/bulb.tariff.v1.TariffService/GetTariff": grpclib.const.Handler(
                 self.__rpc_get_tariff,
                 grpclib.const.Cardinality.UNARY_UNARY,
                 GetTariffRequest,
                 Tariff,
             ),
-            "/bulb.tariff.TariffService/UpdateTariff": grpclib.const.Handler(
+            "/bulb.tariff.v1.TariffService/UpdateTariff": grpclib.const.Handler(
                 self.__rpc_update_tariff,
                 grpclib.const.Cardinality.UNARY_UNARY,
                 UpdateTariffRequest,
                 Tariff,
             ),
+            "/bulb.tariff.v1.TariffService/StreamRatesForTariff": grpclib.const.Handler(
+                self.__rpc_stream_rates_for_tariff,
+                grpclib.const.Cardinality.UNARY_STREAM,
+                GetRatesForTariffRequest,
+                PricePack,
+            ),
+            "/bulb.tariff.v1.TariffService/StreamUpdateRatesForPriceChange": grpclib.const.Handler(
+                self.__rpc_stream_update_rates_for_price_change,
+                grpclib.const.Cardinality.STREAM_UNARY,
+                PriceChangeTariffPricePack,
+                betterproto_lib_google_protobuf.Empty,
+            ),
         }
+
+
+import betterproto.lib.google.protobuf as betterproto_lib_google_protobuf

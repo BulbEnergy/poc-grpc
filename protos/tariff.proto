@@ -1,23 +1,18 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 //import "google/protobuf/field_mask.proto";
 
-package bulb.tariff;
+package bulb.tariff.v1;
 
 service TariffService {
   rpc ListTariffs (ListTariffsRequest) returns (ListTariffsResponse) {}
   rpc BatchGetTariffs (BatchGetTariffsRequest) returns (BatchGetTariffsResponse) {}
   rpc GetTariff (GetTariffRequest) returns (Tariff) {}
   rpc UpdateTariff (UpdateTariffRequest) returns (Tariff) {}
-}
-
-message Ids {
-  repeated string ids = 1;
-}
-
-message References {
-  repeated string references = 1;
+  rpc StreamRatesForTariff (GetRatesForTariffRequest) returns (stream PricePack) {}
+  rpc StreamUpdateRatesForPriceChange (stream PriceChangeTariffPricePack) returns (google.protobuf.Empty) {}
 }
 
 message ListTariffsRequest {}
@@ -27,10 +22,9 @@ message ListTariffsResponse {
 }
 
 message BatchGetTariffsRequest {
-  repeated string ids = 1;
-  repeated string references = 2;
+  repeated string tariff_ids = 1;
   repeated string fuel_types = 3;
-  repeated string tariff_types = 4;
+  repeated TariffType tariff_types = 4;
 }
 
 message BatchGetTariffsResponse {
@@ -38,15 +32,25 @@ message BatchGetTariffsResponse {
 }
 
 message GetTariffRequest {
-  string id = 1;
+  string tariff_id = 1;
 }
-
 
 message UpdateTariffRequest {
   Tariff tariff = 1;
 //  google.protobuf.FieldMask update_mask = 2;
 }
 
+message GetRatesForTariffRequest {
+  string tariff_id = 1;
+  repeated FuelType fuel_types = 2;
+  repeated string region_codes = 3;
+}
+
+message PriceChangeTariffPricePack {
+  string price_change_id = 1;
+  string tariff_id = 2;
+  PricePack price_pack = 3;
+}
 
 enum FuelType {
   UNKNOWN_FUEL = 0;
@@ -75,9 +79,8 @@ enum PaymentMethod {
 }
 
 message Tariff {
-  // the unique short code for the tariff (cannot be changed)
-  // TODO work out how this interacts with multiple Junifer tariffs -> one Iris tariff
-  string id = 1;
+  // the UUID of the tariff
+  string tariff_id = 1;
   // the human-readable name for the tariff (can change)
   string name = 2;
   // which fuel types this tariff is applicable to
@@ -96,7 +99,6 @@ message Tariff {
   optional google.protobuf.Timestamp available_to = 8;
   // a description of features enabled for the tariff
   TariffFeatures features = 9;
-  int64 blah = 10;
 }
 
 enum Interval {
@@ -115,43 +117,28 @@ message TariffFeatures {
   Interval standing_charge_interval = 2;
 }
 
-// The pricing of a Tariff in a particular region.
-message TariffRegion {
-  // in UK this is a GSP group
-  string region_name = 1;
-  // the map of FuelTypes to lists of PricePacks
-  // (can't use map<...> because of enum and repeated)
-  PricePacksForFuel price_packs_for_fuel = 2;
-}
-
-message PricePacksForFuel {
-  // which fuel type the PricePacks are for
-  FuelType fuel_type = 1;
-  // all the prices for a region and fuel
-  // (PricePacks contain when they apply from)
-  repeated PricePack price_packs = 2;
-  // Which Junifer tariffs are encompassed by this tariff-region-fuel?? TODO sanity check
-  repeated string legacy_references = 3;
-}
-
 // Prices for a single region and fuel type, starting from a date.
 // A PricePack is flexible and requires validation to 'fit' in a tariff.
 message PricePack {
+  // in UK this is a GSP group
+  string region_code = 1;
+  // which fuel type these are prices for
+  FuelType fuel_type = 2;
   // when these prices starts affecting existing members
-  google.protobuf.Timestamp existing_members_effective_at = 1;
+  google.protobuf.Timestamp existing_members_effective_at = 3;
   // when these prices starts affecting new members
-  google.protobuf.Timestamp new_members_effective_at = 2;
+  google.protobuf.Timestamp new_members_effective_at = 4;
   // the price of energy for each time interval described in TariffFeatures
   // in order, e.g. if the rate_start_times are ['02:00', '06:00']
   // - there are exactly two unit_rates
   // - the first unit_rates item is the price for 02:00-06:00
   // - the second unit_rates item is the price for 06:00-02:00
-  repeated UnitRate unit_rates = 3;
+  repeated UnitRate unit_rates = 5;
   // the standing charge that applies to every meter this tariff covers
   // (if we discover we want multiple StandingCharges
   // we can change this to 'repeated' without breaking wire compatibility
   // but old clients would only 'see' the last one in the list)
-  optional StandingCharge standing_charges = 4;
+  optional StandingCharge standing_charge = 6;
 }
 
 enum Unit {
@@ -167,10 +154,6 @@ message UnitRate {
   // empty for single rate, otherwise when in the day the rate starts applying
   // e.g. '02:00'
   optional string start_time = 3;
-  // empty for single rate, otherwise when in the day the rate stops applying
-  // (this can be 'before' start_time, in which case it wraps around midnight)
-  // e.g. '06:00'
-  optional string end_time = 4;
 }
 
 message StandingCharge {
@@ -181,44 +164,31 @@ message StandingCharge {
 }
 
 message PriceChange {
+  // the UUID of the price change
+  string price_change_id = 1;
   // when the price change was created
-  google.protobuf.Timestamp created_at = 1;
+  google.protobuf.Timestamp created_at = 2;
   // when the price changes (if published) starts affecting existing members
-  google.protobuf.Timestamp existing_members_effective_at = 2;
+  google.protobuf.Timestamp existing_members_effective_at = 3;
   // when the price changes (if published) starts affecting new members
-  google.protobuf.Timestamp new_members_effective_at = 3;
+  google.protobuf.Timestamp new_members_effective_at = 4;
   // when the price change was published
   // (if it hasn't got a published_at, it's in draft)
-  optional google.protobuf.Timestamp published_at = 4;
-  // TODO something something actions/approval
+  optional google.protobuf.Timestamp published_at = 5;
+  // what reviews have been requested and their status
+  repeated Review reviews = 6;
   // how much progress has been made with applying the published price change
-  OrchestrationSteps orchestration_steps = 5;
-  // all the actual new pricing information
-  // TODO try to name this better
-  repeated PriceChangeTariffRegion price_changes_by_tariff_region = 6;
+  OrchestrationSteps orchestration_steps = 7;
 }
 
-// TODO decide if we even want to have anything for this yet
+message Review {
+  string reviewer = 1;
+  bool approved = 2;
+}
+
 message OrchestrationSteps {
   bool junifer_updated = 1;
   bool pcws_updated = 2;
   bool comms_sent = 3;
   bool pay_review_completed = 4;
-}
-
-// TODO decide if this should have more hierarchy
-message PriceChangeTariffRegion {
-  // the unique short code of a tariff
-  string tariff_id = 1;
-  // in UK this is a GSP group
-  string region_name = 2;
-  // the map of FuelTypes to new PricePacks
-  repeated PricePacksForFuel price_packs_for_fuel = 3;
-}
-
-message PricePackForFuel {
-  // which fuel type the PricePack is for
-  FuelType fuel_type = 1;
-  // the new price for the region and fuel
-  repeated PricePack price_packs = 2;
 }

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "grpc-example"
+name = "tariff-client"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
@@ -10,15 +10,21 @@ grpcio = "^1.45.0"
 grpcio-tools = "^1.45.0"
 grpc-stubs = "^1.24.10"
 pydantic = "^1.9.0"
-black = "^22.3.0"
 betterproto = {version = "2.0.0b4", extras = ["compiler"]}
 MarkupSafe = "2.0.1"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.942"
-types-protobuf = "^3.19.18"
-mypy-protobuf = "^3.2.0"
+types-python-dateutil = "^2.8.14"
+black = "^22.3.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+strict = true
+
+[[tool.mypy.overrides]]
+module = 'tariff_client.bulb.tariff.v1'
+ignore_errors = true
