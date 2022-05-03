@@ -116,6 +116,10 @@ class Tariff(betterproto.Message):
     )
     # a description of features enabled for the tariff
     features: "TariffFeatures" = betterproto.message_field(9)
+    # the original short reference for this tariff in Junifer (if any)
+    legacy_reference: Optional[str] = betterproto.message_field(
+        10, wraps=betterproto.TYPE_STRING
+    )
 
 
 @dataclass(eq=False, repr=False)

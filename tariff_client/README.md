@@ -8,7 +8,7 @@
 ### Step 2: Generate python types and classes based on tariff.proto
 
 ```bash
-poetry run python -m grpc_tools.protoc \ 
+poetry run python -m grpc_tools.protoc \
   -I ../protos \
   --python_betterproto_out=tariff_client \
   ../protos/tariff.proto

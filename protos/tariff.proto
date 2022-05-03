@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
 //import "google/protobuf/field_mask.proto";
 
 package bulb.tariff.v1;
@@ -99,6 +100,8 @@ message Tariff {
   optional google.protobuf.Timestamp available_to = 8;
   // a description of features enabled for the tariff
   TariffFeatures features = 9;
+  // the original short reference for this tariff in Junifer (if any)
+  google.protobuf.StringValue legacy_reference = 10;
 }
 
 enum Interval {

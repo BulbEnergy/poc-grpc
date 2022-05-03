@@ -4,7 +4,9 @@ import uuid
 import grpclib
 from betterproto.lib.google.protobuf import FieldMask
 from grpclib.client import Channel
+from multidict import MultiDict
 
+from .metadata import listen_for_metadata, metadata_to_send
 from .bulb.tariff.v1 import (
     TariffServiceStub,
     Tariff,
@@ -16,7 +18,16 @@ from .bulb.tariff.v1 import (
 
 
 async def main() -> None:
+    # initialise an HTTP/2 connection to a gRPC server
+    # this single connection can handle many requests in parallel
     channel = Channel(host="127.0.0.1", port=50051)
+    # metadata.py describes how we use grpclib events to send/receive metadata
+    # (and prints metadata we receive from servers)
+    listen_for_metadata(channel)
+    # send a correlation_id with every request (we can imagine writing a
+    # wrapper for Channel that sets up this, tracing, etc.)
+    metadata_to_send.set(MultiDict(correlation_id="abc"))
+
     service = TariffServiceStub(channel)
 
     response = await service.list_tariffs()

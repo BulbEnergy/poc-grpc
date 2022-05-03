@@ -1,6 +1,5 @@
 import asyncio
 import uuid
-from contextvars import ContextVar
 from datetime import datetime
 from typing import Optional, AsyncIterator
 
@@ -8,13 +7,13 @@ import grpclib
 from betterproto.lib.google import protobuf
 from dateutil.tz import UTC
 from grpclib._typing import IServable
-from grpclib.events import listen, RecvRequest
 from grpclib.health.check import ServiceCheck
 from grpclib.health.service import Health, OVERALL
 from grpclib.reflection.service import ServerReflection
 from grpclib.server import Server
 from grpclib.utils import graceful_exit
 
+from .metadata import listen_for_metadata
 from .bulb.tariff.v1 import (
     TariffServiceBase,
     Tariff,
@@ -57,6 +56,7 @@ TARIFFS = {
             rate_start_times=["02:00", "06:00"],
             standing_charge_interval=Interval.DAILY,
         ),
+        legacy_reference="EV2R-V01-201216",
     ),
     TARIFF_ID_2: Tariff(
         tariff_id=TARIFF_ID_2,
@@ -217,6 +217,10 @@ async def main() -> None:
 
     # https://grpclib.readthedocs.io/en/latest/server.html
     server = Server(services)
+    # metadata.py describes how we use grpclib events to send/receive metadata
+    # (and prints metadata we receive from clients)
+    listen_for_metadata(server)
+
     with graceful_exit([server]):
         await server.start("127.0.0.1", 50051)
         print(f"Running {services}")

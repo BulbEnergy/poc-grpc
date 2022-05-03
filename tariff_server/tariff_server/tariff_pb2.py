@@ -16,10 +16,11 @@ _sym_db = _symbol_database.Default()
 
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
+from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x0ctariff.proto\x12\x0e\x62ulb.tariff.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto"\x14\n\x12ListTariffsRequest">\n\x13ListTariffsResponse\x12\'\n\x07tariffs\x18\x01 \x03(\x0b\x32\x16.bulb.tariff.v1.Tariff"r\n\x16\x42\x61tchGetTariffsRequest\x12\x12\n\ntariff_ids\x18\x01 \x03(\t\x12\x12\n\nfuel_types\x18\x03 \x03(\t\x12\x30\n\x0ctariff_types\x18\x04 \x03(\x0e\x32\x1a.bulb.tariff.v1.TariffType"B\n\x17\x42\x61tchGetTariffsResponse\x12\'\n\x07tariffs\x18\x01 \x03(\x0b\x32\x16.bulb.tariff.v1.Tariff"%\n\x10GetTariffRequest\x12\x11\n\ttariff_id\x18\x01 \x01(\t"=\n\x13UpdateTariffRequest\x12&\n\x06tariff\x18\x01 \x01(\x0b\x32\x16.bulb.tariff.v1.Tariff"q\n\x18GetRatesForTariffRequest\x12\x11\n\ttariff_id\x18\x01 \x01(\t\x12,\n\nfuel_types\x18\x02 \x03(\x0e\x32\x18.bulb.tariff.v1.FuelType\x12\x14\n\x0cregion_codes\x18\x03 \x03(\t"w\n\x1aPriceChangeTariffPricePack\x12\x17\n\x0fprice_change_id\x18\x01 \x01(\t\x12\x11\n\ttariff_id\x18\x02 \x01(\t\x12-\n\nprice_pack\x18\x03 \x01(\x0b\x32\x19.bulb.tariff.v1.PricePack"\xac\x03\n\x06Tariff\x12\x11\n\ttariff_id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12,\n\nfuel_types\x18\x03 \x03(\x0e\x32\x18.bulb.tariff.v1.FuelType\x12\x35\n\x0epayment_method\x18\x04 \x01(\x0e\x32\x1d.bulb.tariff.v1.PaymentMethod\x12/\n\x0btariff_type\x18\x05 \x01(\x0e\x32\x1a.bulb.tariff.v1.TariffType\x12=\n\x12publication_status\x18\x06 \x01(\x0e\x32!.bulb.tariff.v1.PublicationStatus\x12\x32\n\x0e\x61vailable_from\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x35\n\x0c\x61vailable_to\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x88\x01\x01\x12\x30\n\x08\x66\x65\x61tures\x18\t \x01(\x0b\x32\x1e.bulb.tariff.v1.TariffFeaturesB\x0f\n\r_available_to"f\n\x0eTariffFeatures\x12\x18\n\x10rate_start_times\x18\x01 \x03(\t\x12:\n\x18standing_charge_interval\x18\x02 \x01(\x0e\x32\x18.bulb.tariff.v1.Interval"\xce\x02\n\tPricePack\x12\x13\n\x0bregion_code\x18\x01 \x01(\t\x12+\n\tfuel_type\x18\x02 \x01(\x0e\x32\x18.bulb.tariff.v1.FuelType\x12\x41\n\x1d\x65xisting_members_effective_at\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12<\n\x18new_members_effective_at\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\nunit_rates\x18\x05 \x03(\x0b\x32\x18.bulb.tariff.v1.UnitRate\x12<\n\x0fstanding_charge\x18\x06 \x01(\x0b\x32\x1e.bulb.tariff.v1.StandingChargeH\x00\x88\x01\x01\x42\x12\n\x10_standing_charge"e\n\x08UnitRate\x12\r\n\x05\x63\x65nts\x18\x01 \x01(\x01\x12"\n\x04unit\x18\x02 \x01(\x0e\x32\x14.bulb.tariff.v1.Unit\x12\x17\n\nstart_time\x18\x03 \x01(\tH\x00\x88\x01\x01\x42\r\n\x0b_start_time"K\n\x0eStandingCharge\x12\r\n\x05\x63\x65nts\x18\x01 \x01(\x01\x12*\n\x08interval\x18\x02 \x01(\x0e\x32\x18.bulb.tariff.v1.Interval"\x89\x03\n\x0bPriceChange\x12\x17\n\x0fprice_change_id\x18\x01 \x01(\t\x12.\n\ncreated_at\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x41\n\x1d\x65xisting_members_effective_at\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12<\n\x18new_members_effective_at\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x35\n\x0cpublished_at\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x88\x01\x01\x12\'\n\x07reviews\x18\x06 \x03(\x0b\x32\x16.bulb.tariff.v1.Review\x12?\n\x13orchestration_steps\x18\x07 \x01(\x0b\x32".bulb.tariff.v1.OrchestrationStepsB\x0f\n\r_published_at",\n\x06Review\x12\x10\n\x08reviewer\x18\x01 \x01(\t\x12\x10\n\x08\x61pproved\x18\x02 \x01(\x08"u\n\x12OrchestrationSteps\x12\x17\n\x0fjunifer_updated\x18\x01 \x01(\x08\x12\x14\n\x0cpcws_updated\x18\x02 \x01(\x08\x12\x12\n\ncomms_sent\x18\x03 \x01(\x08\x12\x1c\n\x14pay_review_completed\x18\x04 \x01(\x08*6\n\x08\x46uelType\x12\x10\n\x0cUNKNOWN_FUEL\x10\x00\x12\x0f\n\x0b\x45LECTRICITY\x10\x01\x12\x07\n\x03GAS\x10\x02*9\n\nTariffType\x12\x12\n\x0eUNKNOWN_TARIFF\x10\x00\x12\x0c\n\x08VARIABLE\x10\x01\x12\t\n\x05\x46IXED\x10\x02*b\n\x11PublicationStatus\x12\x12\n\x0eUNKNOWN_STATUS\x10\x00\x12\x16\n\x12UNDER_CONSTRUCTION\x10\x01\x12\t\n\x05\x44RAFT\x10\x02\x12\x08\n\x04LIVE\x10\x03\x12\x0c\n\x08\x41RCHIVED\x10\x04*=\n\rPaymentMethod\x12\x1a\n\x16UNKNOWN_PAYMENT_METHOD\x10\x00\x12\x10\n\x0c\x44IRECT_DEBIT\x10\x01*6\n\x08Interval\x12\x14\n\x10UNKNOWN_INTERVAL\x10\x00\x12\t\n\x05NEVER\x10\x01\x12\t\n\x05\x44\x41ILY\x10\x02*!\n\x04Unit\x12\x10\n\x0cUNKNOWN_UNIT\x10\x00\x12\x07\n\x03KWH\x10\x01\x32\xb3\x04\n\rTariffService\x12X\n\x0bListTariffs\x12".bulb.tariff.v1.ListTariffsRequest\x1a#.bulb.tariff.v1.ListTariffsResponse"\x00\x12\x64\n\x0f\x42\x61tchGetTariffs\x12&.bulb.tariff.v1.BatchGetTariffsRequest\x1a\'.bulb.tariff.v1.BatchGetTariffsResponse"\x00\x12G\n\tGetTariff\x12 .bulb.tariff.v1.GetTariffRequest\x1a\x16.bulb.tariff.v1.Tariff"\x00\x12M\n\x0cUpdateTariff\x12#.bulb.tariff.v1.UpdateTariffRequest\x1a\x16.bulb.tariff.v1.Tariff"\x00\x12_\n\x14StreamRatesForTariff\x12(.bulb.tariff.v1.GetRatesForTariffRequest\x1a\x19.bulb.tariff.v1.PricePack"\x00\x30\x01\x12i\n\x1fStreamUpdateRatesForPriceChange\x12*.bulb.tariff.v1.PriceChangeTariffPricePack\x1a\x16.google.protobuf.Empty"\x00(\x01\x62\x06proto3'
+    b'\n\x0ctariff.proto\x12\x0e\x62ulb.tariff.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1egoogle/protobuf/wrappers.proto"\x14\n\x12ListTariffsRequest">\n\x13ListTariffsResponse\x12\'\n\x07tariffs\x18\x01 \x03(\x0b\x32\x16.bulb.tariff.v1.Tariff"r\n\x16\x42\x61tchGetTariffsRequest\x12\x12\n\ntariff_ids\x18\x01 \x03(\t\x12\x12\n\nfuel_types\x18\x03 \x03(\t\x12\x30\n\x0ctariff_types\x18\x04 \x03(\x0e\x32\x1a.bulb.tariff.v1.TariffType"B\n\x17\x42\x61tchGetTariffsResponse\x12\'\n\x07tariffs\x18\x01 \x03(\x0b\x32\x16.bulb.tariff.v1.Tariff"%\n\x10GetTariffRequest\x12\x11\n\ttariff_id\x18\x01 \x01(\t"=\n\x13UpdateTariffRequest\x12&\n\x06tariff\x18\x01 \x01(\x0b\x32\x16.bulb.tariff.v1.Tariff"q\n\x18GetRatesForTariffRequest\x12\x11\n\ttariff_id\x18\x01 \x01(\t\x12,\n\nfuel_types\x18\x02 \x03(\x0e\x32\x18.bulb.tariff.v1.FuelType\x12\x14\n\x0cregion_codes\x18\x03 \x03(\t"w\n\x1aPriceChangeTariffPricePack\x12\x17\n\x0fprice_change_id\x18\x01 \x01(\t\x12\x11\n\ttariff_id\x18\x02 \x01(\t\x12-\n\nprice_pack\x18\x03 \x01(\x0b\x32\x19.bulb.tariff.v1.PricePack"\xe4\x03\n\x06Tariff\x12\x11\n\ttariff_id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12,\n\nfuel_types\x18\x03 \x03(\x0e\x32\x18.bulb.tariff.v1.FuelType\x12\x35\n\x0epayment_method\x18\x04 \x01(\x0e\x32\x1d.bulb.tariff.v1.PaymentMethod\x12/\n\x0btariff_type\x18\x05 \x01(\x0e\x32\x1a.bulb.tariff.v1.TariffType\x12=\n\x12publication_status\x18\x06 \x01(\x0e\x32!.bulb.tariff.v1.PublicationStatus\x12\x32\n\x0e\x61vailable_from\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x35\n\x0c\x61vailable_to\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x88\x01\x01\x12\x30\n\x08\x66\x65\x61tures\x18\t \x01(\x0b\x32\x1e.bulb.tariff.v1.TariffFeatures\x12\x36\n\x10legacy_reference\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValueB\x0f\n\r_available_to"f\n\x0eTariffFeatures\x12\x18\n\x10rate_start_times\x18\x01 \x03(\t\x12:\n\x18standing_charge_interval\x18\x02 \x01(\x0e\x32\x18.bulb.tariff.v1.Interval"\xce\x02\n\tPricePack\x12\x13\n\x0bregion_code\x18\x01 \x01(\t\x12+\n\tfuel_type\x18\x02 \x01(\x0e\x32\x18.bulb.tariff.v1.FuelType\x12\x41\n\x1d\x65xisting_members_effective_at\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12<\n\x18new_members_effective_at\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\nunit_rates\x18\x05 \x03(\x0b\x32\x18.bulb.tariff.v1.UnitRate\x12<\n\x0fstanding_charge\x18\x06 \x01(\x0b\x32\x1e.bulb.tariff.v1.StandingChargeH\x00\x88\x01\x01\x42\x12\n\x10_standing_charge"e\n\x08UnitRate\x12\r\n\x05\x63\x65nts\x18\x01 \x01(\x01\x12"\n\x04unit\x18\x02 \x01(\x0e\x32\x14.bulb.tariff.v1.Unit\x12\x17\n\nstart_time\x18\x03 \x01(\tH\x00\x88\x01\x01\x42\r\n\x0b_start_time"K\n\x0eStandingCharge\x12\r\n\x05\x63\x65nts\x18\x01 \x01(\x01\x12*\n\x08interval\x18\x02 \x01(\x0e\x32\x18.bulb.tariff.v1.Interval"\x89\x03\n\x0bPriceChange\x12\x17\n\x0fprice_change_id\x18\x01 \x01(\t\x12.\n\ncreated_at\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x41\n\x1d\x65xisting_members_effective_at\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12<\n\x18new_members_effective_at\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x35\n\x0cpublished_at\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x88\x01\x01\x12\'\n\x07reviews\x18\x06 \x03(\x0b\x32\x16.bulb.tariff.v1.Review\x12?\n\x13orchestration_steps\x18\x07 \x01(\x0b\x32".bulb.tariff.v1.OrchestrationStepsB\x0f\n\r_published_at",\n\x06Review\x12\x10\n\x08reviewer\x18\x01 \x01(\t\x12\x10\n\x08\x61pproved\x18\x02 \x01(\x08"u\n\x12OrchestrationSteps\x12\x17\n\x0fjunifer_updated\x18\x01 \x01(\x08\x12\x14\n\x0cpcws_updated\x18\x02 \x01(\x08\x12\x12\n\ncomms_sent\x18\x03 \x01(\x08\x12\x1c\n\x14pay_review_completed\x18\x04 \x01(\x08*6\n\x08\x46uelType\x12\x10\n\x0cUNKNOWN_FUEL\x10\x00\x12\x0f\n\x0b\x45LECTRICITY\x10\x01\x12\x07\n\x03GAS\x10\x02*9\n\nTariffType\x12\x12\n\x0eUNKNOWN_TARIFF\x10\x00\x12\x0c\n\x08VARIABLE\x10\x01\x12\t\n\x05\x46IXED\x10\x02*b\n\x11PublicationStatus\x12\x12\n\x0eUNKNOWN_STATUS\x10\x00\x12\x16\n\x12UNDER_CONSTRUCTION\x10\x01\x12\t\n\x05\x44RAFT\x10\x02\x12\x08\n\x04LIVE\x10\x03\x12\x0c\n\x08\x41RCHIVED\x10\x04*=\n\rPaymentMethod\x12\x1a\n\x16UNKNOWN_PAYMENT_METHOD\x10\x00\x12\x10\n\x0c\x44IRECT_DEBIT\x10\x01*6\n\x08Interval\x12\x14\n\x10UNKNOWN_INTERVAL\x10\x00\x12\t\n\x05NEVER\x10\x01\x12\t\n\x05\x44\x41ILY\x10\x02*!\n\x04Unit\x12\x10\n\x0cUNKNOWN_UNIT\x10\x00\x12\x07\n\x03KWH\x10\x01\x32\xb3\x04\n\rTariffService\x12X\n\x0bListTariffs\x12".bulb.tariff.v1.ListTariffsRequest\x1a#.bulb.tariff.v1.ListTariffsResponse"\x00\x12\x64\n\x0f\x42\x61tchGetTariffs\x12&.bulb.tariff.v1.BatchGetTariffsRequest\x1a\'.bulb.tariff.v1.BatchGetTariffsResponse"\x00\x12G\n\tGetTariff\x12 .bulb.tariff.v1.GetTariffRequest\x1a\x16.bulb.tariff.v1.Tariff"\x00\x12M\n\x0cUpdateTariff\x12#.bulb.tariff.v1.UpdateTariffRequest\x1a\x16.bulb.tariff.v1.Tariff"\x00\x12_\n\x14StreamRatesForTariff\x12(.bulb.tariff.v1.GetRatesForTariffRequest\x1a\x19.bulb.tariff.v1.PricePack"\x00\x30\x01\x12i\n\x1fStreamUpdateRatesForPriceChange\x12*.bulb.tariff.v1.PriceChangeTariffPricePack\x1a\x16.google.protobuf.Empty"\x00(\x01\x62\x06proto3'
 )
 
 _FUELTYPE = DESCRIPTOR.enum_types_by_name["FuelType"]
@@ -252,50 +253,50 @@ _TARIFFSERVICE = DESCRIPTOR.services_by_name["TariffService"]
 if _descriptor._USE_C_DESCRIPTORS == False:
 
     DESCRIPTOR._options = None
-    _FUELTYPE._serialized_start = 2315
-    _FUELTYPE._serialized_end = 2369
-    _TARIFFTYPE._serialized_start = 2371
-    _TARIFFTYPE._serialized_end = 2428
-    _PUBLICATIONSTATUS._serialized_start = 2430
-    _PUBLICATIONSTATUS._serialized_end = 2528
-    _PAYMENTMETHOD._serialized_start = 2530
-    _PAYMENTMETHOD._serialized_end = 2591
-    _INTERVAL._serialized_start = 2593
-    _INTERVAL._serialized_end = 2647
-    _UNIT._serialized_start = 2649
-    _UNIT._serialized_end = 2682
-    _LISTTARIFFSREQUEST._serialized_start = 94
-    _LISTTARIFFSREQUEST._serialized_end = 114
-    _LISTTARIFFSRESPONSE._serialized_start = 116
-    _LISTTARIFFSRESPONSE._serialized_end = 178
-    _BATCHGETTARIFFSREQUEST._serialized_start = 180
-    _BATCHGETTARIFFSREQUEST._serialized_end = 294
-    _BATCHGETTARIFFSRESPONSE._serialized_start = 296
-    _BATCHGETTARIFFSRESPONSE._serialized_end = 362
-    _GETTARIFFREQUEST._serialized_start = 364
-    _GETTARIFFREQUEST._serialized_end = 401
-    _UPDATETARIFFREQUEST._serialized_start = 403
-    _UPDATETARIFFREQUEST._serialized_end = 464
-    _GETRATESFORTARIFFREQUEST._serialized_start = 466
-    _GETRATESFORTARIFFREQUEST._serialized_end = 579
-    _PRICECHANGETARIFFPRICEPACK._serialized_start = 581
-    _PRICECHANGETARIFFPRICEPACK._serialized_end = 700
-    _TARIFF._serialized_start = 703
-    _TARIFF._serialized_end = 1131
-    _TARIFFFEATURES._serialized_start = 1133
-    _TARIFFFEATURES._serialized_end = 1235
-    _PRICEPACK._serialized_start = 1238
-    _PRICEPACK._serialized_end = 1572
-    _UNITRATE._serialized_start = 1574
-    _UNITRATE._serialized_end = 1675
-    _STANDINGCHARGE._serialized_start = 1677
-    _STANDINGCHARGE._serialized_end = 1752
-    _PRICECHANGE._serialized_start = 1755
-    _PRICECHANGE._serialized_end = 2148
-    _REVIEW._serialized_start = 2150
-    _REVIEW._serialized_end = 2194
-    _ORCHESTRATIONSTEPS._serialized_start = 2196
-    _ORCHESTRATIONSTEPS._serialized_end = 2313
-    _TARIFFSERVICE._serialized_start = 2685
-    _TARIFFSERVICE._serialized_end = 3248
+    _FUELTYPE._serialized_start = 2403
+    _FUELTYPE._serialized_end = 2457
+    _TARIFFTYPE._serialized_start = 2459
+    _TARIFFTYPE._serialized_end = 2516
+    _PUBLICATIONSTATUS._serialized_start = 2518
+    _PUBLICATIONSTATUS._serialized_end = 2616
+    _PAYMENTMETHOD._serialized_start = 2618
+    _PAYMENTMETHOD._serialized_end = 2679
+    _INTERVAL._serialized_start = 2681
+    _INTERVAL._serialized_end = 2735
+    _UNIT._serialized_start = 2737
+    _UNIT._serialized_end = 2770
+    _LISTTARIFFSREQUEST._serialized_start = 126
+    _LISTTARIFFSREQUEST._serialized_end = 146
+    _LISTTARIFFSRESPONSE._serialized_start = 148
+    _LISTTARIFFSRESPONSE._serialized_end = 210
+    _BATCHGETTARIFFSREQUEST._serialized_start = 212
+    _BATCHGETTARIFFSREQUEST._serialized_end = 326
+    _BATCHGETTARIFFSRESPONSE._serialized_start = 328
+    _BATCHGETTARIFFSRESPONSE._serialized_end = 394
+    _GETTARIFFREQUEST._serialized_start = 396
+    _GETTARIFFREQUEST._serialized_end = 433
+    _UPDATETARIFFREQUEST._serialized_start = 435
+    _UPDATETARIFFREQUEST._serialized_end = 496
+    _GETRATESFORTARIFFREQUEST._serialized_start = 498
+    _GETRATESFORTARIFFREQUEST._serialized_end = 611
+    _PRICECHANGETARIFFPRICEPACK._serialized_start = 613
+    _PRICECHANGETARIFFPRICEPACK._serialized_end = 732
+    _TARIFF._serialized_start = 735
+    _TARIFF._serialized_end = 1219
+    _TARIFFFEATURES._serialized_start = 1221
+    _TARIFFFEATURES._serialized_end = 1323
+    _PRICEPACK._serialized_start = 1326
+    _PRICEPACK._serialized_end = 1660
+    _UNITRATE._serialized_start = 1662
+    _UNITRATE._serialized_end = 1763
+    _STANDINGCHARGE._serialized_start = 1765
+    _STANDINGCHARGE._serialized_end = 1840
+    _PRICECHANGE._serialized_start = 1843
+    _PRICECHANGE._serialized_end = 2236
+    _REVIEW._serialized_start = 2238
+    _REVIEW._serialized_end = 2282
+    _ORCHESTRATIONSTEPS._serialized_start = 2284
+    _ORCHESTRATIONSTEPS._serialized_end = 2401
+    _TARIFFSERVICE._serialized_start = 2773
+    _TARIFFSERVICE._serialized_end = 3336
 # @@protoc_insertion_point(module_scope)
