@@ -15,6 +15,8 @@ poetry run protol --in-place \
  ../protos/tariff.proto
  
 poetry run black .
+
+poetry run -m tariff_server_google.tariff_server
 ```
 
 ## Development notes
