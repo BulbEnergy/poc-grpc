@@ -129,3 +129,11 @@ dmypy.json
 .pyre/
 
 .idea/
+
+# node / typescript
+node_modules/
+lib/
+*.tsbuildinfo
+typings/
+# macos
+.DS_Store

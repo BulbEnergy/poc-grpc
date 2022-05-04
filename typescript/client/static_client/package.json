@@ -1,0 +1,35 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "TypeScript gRPC client",
+  "main": "src/index.js",
+  "author": "Alan Lau",
+  "license": "MIT",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.6.7",
+    "@grpc/proto-loader": "^0.6.10",
+    "@types/node": "^17.0.31",
+    "async": "^3.2.3",
+    "grpc-health-check": "^1.8.0",
+    "grpc-tools": "^1.11.2",
+    "long": "^5.2.0",
+    "rxjs": "^7.5.5",
+    "ts-node": "^10.7.0",
+    "ts-proto": "^1.112.0",
+    "typescript": "^4.6.4"
+  },
+  "devDependencies": {
+    "@bulb/eslint-config-bulb": "^3.1.0",
+    "nodemon": "^2.0.16",
+    "prettier": "^2.6.2"
+  },
+  "scripts": {
+    "start": "yarn ts-node .",
+    "build": "yarn clean && tsc -p tsconfig.json",
+    "clean": "rm -rf ./lib",
+    "lint": "eslint --cache '{src}/**/*.{ts,js}'",
+    "format": "prettier --write '{src}/**/*.{ts,js}'",
+    "prettier": "prettier --list-different '{src}/**/*.{ts,js}'",
+    "grpc": "yarn grpc_tools_node_protoc --ts_proto_out=. --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_opt=outputServices=grpc-js --proto_path ../../../protos ../../../protos/tariff.proto"
+  }
+}
