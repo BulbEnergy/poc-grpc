@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "tariff_server_google"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "3.10"  # protoletariat is unhappy with ^3.10
+grpcio-tools = "^1.46.0"
+grpcio = "^1.46.0"
+python-dateutil = "^2.8.2"
+grpcio-reflection = "^1.46.0"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.950"
+types-protobuf = "^3.19.18"
+mypy-protobuf = "^3.2.0"
+black = "^22.3.0"
+grpc-stubs = "^1.24.10"
+types-python-dateutil = "^2.8.14"
+protoletariat = "^0.9.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

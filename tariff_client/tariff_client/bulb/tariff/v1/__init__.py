@@ -58,8 +58,11 @@ class ListTariffsResponse(betterproto.Message):
 
 @dataclass(eq=False, repr=False)
 class BatchGetTariffsRequest(betterproto.Message):
+    # The tariff IDs to get. Mutually exclusive with other options.
     tariff_ids: List[str] = betterproto.string_field(1)
-    fuel_types: List[str] = betterproto.string_field(3)
+    # Only fetch tariffs that cover at least one of these fuel types.
+    fuel_types: List["FuelType"] = betterproto.enum_field(3)
+    # Only fetch tariffs of one of these types (fixed, variable, ...)
     tariff_types: List["TariffType"] = betterproto.enum_field(4)
 
 
@@ -70,12 +73,17 @@ class BatchGetTariffsResponse(betterproto.Message):
 
 @dataclass(eq=False, repr=False)
 class GetTariffRequest(betterproto.Message):
+    # The tariff ID to fetch.
     tariff_id: str = betterproto.string_field(1)
 
 
 @dataclass(eq=False, repr=False)
 class UpdateTariffRequest(betterproto.Message):
+    # The tariff to update.
     tariff: "Tariff" = betterproto.message_field(1)
+    update_mask: "betterproto_lib_google_protobuf.FieldMask" = (
+        betterproto.message_field(2)
+    )
 
 
 @dataclass(eq=False, repr=False)
@@ -229,7 +237,7 @@ class TariffServiceStub(betterproto.ServiceStub):
         self,
         *,
         tariff_ids: Optional[List[str]] = None,
-        fuel_types: Optional[List[str]] = None,
+        fuel_types: Optional[List["FuelType"]] = None,
         tariff_types: Optional[List["TariffType"]] = None
     ) -> "BatchGetTariffsResponse":
         tariff_ids = tariff_ids or []
@@ -256,11 +264,18 @@ class TariffServiceStub(betterproto.ServiceStub):
             "/bulb.tariff.v1.TariffService/GetTariff", request, Tariff
         )
 
-    async def update_tariff(self, *, tariff: "Tariff" = None) -> "Tariff":
+    async def update_tariff(
+        self,
+        *,
+        tariff: "Tariff" = None,
+        update_mask: "betterproto_lib_google_protobuf.FieldMask" = None
+    ) -> "Tariff":
 
         request = UpdateTariffRequest()
         if tariff is not None:
             request.tariff = tariff
+        if update_mask is not None:
+            request.update_mask = update_mask
 
         return await self._unary_unary(
             "/bulb.tariff.v1.TariffService/UpdateTariff", request, Tariff
@@ -311,7 +326,7 @@ class TariffServiceBase(ServiceBase):
     async def batch_get_tariffs(
         self,
         tariff_ids: Optional[List[str]],
-        fuel_types: Optional[List[str]],
+        fuel_types: Optional[List["FuelType"]],
         tariff_types: Optional[List["TariffType"]],
     ) -> "BatchGetTariffsResponse":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
@@ -319,7 +334,9 @@ class TariffServiceBase(ServiceBase):
     async def get_tariff(self, tariff_id: str) -> "Tariff":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
 
-    async def update_tariff(self, tariff: "Tariff") -> "Tariff":
+    async def update_tariff(
+        self, tariff: "Tariff", update_mask: "betterproto_lib_google_protobuf.FieldMask"
+    ) -> "Tariff":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
 
     async def stream_rates_for_tariff(
@@ -370,6 +387,7 @@ class TariffServiceBase(ServiceBase):
 
         request_kwargs = {
             "tariff": request.tariff,
+            "update_mask": request.update_mask,
         }
 
         response = await self.update_tariff(**request_kwargs)

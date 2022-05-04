@@ -5,6 +5,7 @@ from typing import Optional, AsyncIterator
 
 import grpclib
 from betterproto.lib.google import protobuf
+from betterproto.lib.google.protobuf import FieldMask
 from dateutil.tz import UTC
 from grpclib._typing import IServable
 from grpclib.health.check import ServiceCheck
@@ -42,7 +43,7 @@ from .tariff_pb2 import _sym_db
 TARIFF_ID_1 = str(uuid.uuid4())
 TARIFF_ID_2 = str(uuid.uuid4())
 
-TARIFFS = {
+TARIFFS: dict[str, Tariff] = {
     TARIFF_ID_1: Tariff(
         tariff_id=TARIFF_ID_1,
         name="EV Tariff",
@@ -87,7 +88,7 @@ class TariffService(TariffServiceBase):
     async def batch_get_tariffs(
         self,
         tariff_ids: list[str] | None,
-        fuel_types: list[str] | None,
+        fuel_types: list[FuelType] | None,
         tariff_types: list[TariffType] | None,
     ) -> BatchGetTariffsResponse:
         if tariff_ids:
@@ -104,7 +105,7 @@ class TariffService(TariffServiceBase):
                 [
                     tariff
                     for tariff in TARIFFS.values()
-                    if (not fuel_types or (set(tariff.fuel_types) | set(fuel_types)))
+                    if (not fuel_types or (set(tariff.fuel_types) & set(fuel_types)))
                     and (not tariff_types or tariff.tariff_type in tariff_types)
                 ]
             )
@@ -119,14 +120,14 @@ class TariffService(TariffServiceBase):
             return TARIFFS[tariff_id]
         except Exception:
             raise grpclib.GRPCError(
-                message=f"Cannot find {tariff_id}",
+                message=f"cannot find {tariff_id}",
                 status=grpclib.const.Status.NOT_FOUND,
             )
 
     async def update_tariff(
         self,
         tariff: Tariff,
-        # update_mask: FieldMask
+        update_mask: FieldMask,
     ) -> Tariff:
         # TODO: investigate using FieldMask for update methods
         #  betterproto doesn't have a "MergeMessage" implementation at present to make FieldMask useful
@@ -136,6 +137,12 @@ class TariffService(TariffServiceBase):
             raise grpclib.GRPCError(
                 message=f"Cannot find {id}", status=grpclib.const.Status.NOT_FOUND
             )
+
+        if update_mask.paths:
+            raise grpclib.GRPCError(
+                message="betterproto makes FieldMasks harder", status=grpclib.const.Status.UNIMPLEMENTED,
+            )
+
         TARIFFS[tariff.tariff_id] = tariff
         return tariff
 
@@ -155,7 +162,7 @@ class TariffService(TariffServiceBase):
 
         try:
             tariff = TARIFFS[tariff_id]
-        except Exception:
+        except KeyError:
             raise grpclib.GRPCError(
                 message=f"Cannot find tariff {id}",
                 status=grpclib.const.Status.NOT_FOUND,
