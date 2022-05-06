@@ -5,15 +5,14 @@ import { exit } from "process";
 
 // entry point
 (async () => {
-  // listTariffs
-  // await listTariffsCallback()
-
+  let tariffId1: string;
 
   console.info("=====> list all tariffs and get tariff using an existing id")
   await listTariffs()
     .then((response) => {
       const tariffs = response.tariffs;
       console.info(tariffs);
+      tariffId1 = tariffs[0].tariffId
       return tariffs;
     })
     .then((tariffs) => {
@@ -60,7 +59,7 @@ import { exit } from "process";
 
   console.info("=====> stream rates of a tariff")
   const streamRatesForTariffRequest: GetRatesForTariffRequest = {
-    tariffId: "ee6d497a-379d-4aad-8844-91d323d4172d",
+    tariffId: tariffId1,
     fuelTypes: [FuelType.ELECTRICITY, FuelType.GAS],
     regionCodes: ["D"],
   }
@@ -71,6 +70,10 @@ import { exit } from "process";
     })
     .on("end", () => {
       console.info("Done")
+
+      // TODO: move clean up somewhere else
+      closeClient(client)
+      exit()
     })
     .on("error", (error: ServiceError) => { console.error(error) })
   console.log("")
