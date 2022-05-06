@@ -58,3 +58,7 @@ poetry run python -m tariff_[server|client].[server|client]
 `yarn start`
 
 # TODO write section about grpcui
+
+# TODO write section about generating docs
+- https://github.com/pseudomuto/protoc-gen-doc
+
