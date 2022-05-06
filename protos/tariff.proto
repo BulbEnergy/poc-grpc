@@ -3,16 +3,27 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
-//import "google/protobuf/field_mask.proto";
+import "google/protobuf/field_mask.proto";
 
 package bulb.tariff.v1;
 
 service TariffService {
+  // List the metadata of all of Bulb's tariffs.
   rpc ListTariffs (ListTariffsRequest) returns (ListTariffsResponse) {}
+
+  // Filter Bulb's tariffs by IDs, or by one or more metadata features.
   rpc BatchGetTariffs (BatchGetTariffsRequest) returns (BatchGetTariffsResponse) {}
+
+  // Get a single tariff by its tariff ID.
   rpc GetTariff (GetTariffRequest) returns (Tariff) {}
+
+  // Update the metadata of a tariff.
   rpc UpdateTariff (UpdateTariffRequest) returns (Tariff) {}
+
+  // (Contrived) Stream the pricing of a tariff from server to client.
   rpc StreamRatesForTariff (GetRatesForTariffRequest) returns (stream PricePack) {}
+
+  // (Contrived) Stream new pricing for a tariff from client to server.
   rpc StreamUpdateRatesForPriceChange (stream PriceChangeTariffPricePack) returns (google.protobuf.Empty) {}
 }
 
@@ -23,8 +34,11 @@ message ListTariffsResponse {
 }
 
 message BatchGetTariffsRequest {
+  // The tariff IDs to get. Mutually exclusive with other options.
   repeated string tariff_ids = 1;
-  repeated string fuel_types = 3;
+  // Only fetch tariffs that cover at least one of these fuel types.
+  repeated FuelType fuel_types = 3;
+  // Only fetch tariffs of one of these types (fixed, variable, ...)
   repeated TariffType tariff_types = 4;
 }
 
@@ -33,12 +47,14 @@ message BatchGetTariffsResponse {
 }
 
 message GetTariffRequest {
+  // The tariff ID to fetch.
   string tariff_id = 1;
 }
 
 message UpdateTariffRequest {
+  // The tariff to update.
   Tariff tariff = 1;
-//  google.protobuf.FieldMask update_mask = 2;
+  google.protobuf.FieldMask update_mask = 2;
 }
 
 message GetRatesForTariffRequest {

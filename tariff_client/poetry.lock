@@ -312,6 +312,14 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "types-protobuf"
+version = "3.19.18"
+description = "Typing stubs for protobuf"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "types-python-dateutil"
 version = "2.8.14"
 description = "Typing stubs for python-dateutil"
@@ -338,7 +346,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "9e0cf444839a0eb13693b9b506564a48a0294bc2a6b2f56abda1f431ef9fe429"
+content-hash = "ede475d2bcc18d1542dfe769da81c1fbdbe7e5a5e2bf7a335fd52a6c2c2590ff"
 
 [metadata.files]
 betterproto = [
@@ -774,6 +782,10 @@ six = [
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
+]
+types-protobuf = [
+    {file = "types-protobuf-3.19.18.tar.gz", hash = "sha256:670b25c1a4f3d650a9d8a009b0cf19a1aa0e7cba044045648b563e825f35d4d3"},
+    {file = "types_protobuf-3.19.18-py3-none-any.whl", hash = "sha256:78d677fefb10e3ea88b8c0fab543833e82cd6eb27e3f71aeda2d5cd9bd503ae1"},
 ]
 types-python-dateutil = [
     {file = "types-python-dateutil-2.8.14.tar.gz", hash = "sha256:367c1ffa1a52a4b2a534c9b30b40b01f2b7f2ea47a97fd821f6c76d1c7ae3129"},
