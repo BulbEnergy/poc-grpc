@@ -152,7 +152,7 @@
     "@grpc/proto-loader" "^0.6.4"
     "@types/node" ">=12.12.47"
 
-"@grpc/proto-loader@^0.6.10", "@grpc/proto-loader@^0.6.4":
+"@grpc/proto-loader@^0.6.4":
   version "0.6.11"
   resolved "https://registry.yarnpkg.com/@grpc/proto-loader/-/proto-loader-0.6.11.tgz#07d8a0e8851ec383492c4e05eeaa45c215845750"
   integrity sha512-MRiPjTjNgKxMupQ0M8mM9Mcljb2aZvE3Y/oEv+dacozIs2TwTdiPbvfkZpMeghfjGtoDJhDjyCtmFzJcjdDTUQ==
@@ -304,7 +304,7 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
-"@types/long@*", "@types/long@^4.0.1":
+"@types/long@*", "@types/long@^4.0.1", "@types/long@^4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@types/long/-/long-4.0.2.tgz#b74129719fc8d11c01868010082d483b7545591a"
   integrity sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==

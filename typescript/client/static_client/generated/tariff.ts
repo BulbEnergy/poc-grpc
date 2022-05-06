@@ -1,6 +1,5 @@
 /* eslint-disable */
-// @ts-ignore
-import * as Long from "long";
+import Long from "long";
 import {
   makeGenericClientConstructor,
   ChannelCredentials,
@@ -20,6 +19,7 @@ import {
 import * as _m0 from "protobufjs/minimal";
 import { Timestamp } from "./google/protobuf/timestamp";
 import { Empty } from "./google/protobuf/empty";
+import { StringValue } from "./google/protobuf/wrappers";
 
 export const protobufPackage = "bulb.tariff.v1";
 
@@ -315,6 +315,8 @@ export interface Tariff {
   availableTo?: Date | undefined;
   /** a description of features enabled for the tariff */
   features: TariffFeatures | undefined;
+  /** the original short reference for this tariff in Junifer (if any) */
+  legacyReference: string | undefined;
 }
 
 export interface TariffFeatures {
@@ -987,6 +989,7 @@ function createBaseTariff(): Tariff {
     availableFrom: undefined,
     availableTo: undefined,
     features: undefined,
+    legacyReference: undefined,
   };
 }
 
@@ -1031,6 +1034,12 @@ export const Tariff = {
       TariffFeatures.encode(
         message.features,
         writer.uint32(74).fork()
+      ).ldelim();
+    }
+    if (message.legacyReference !== undefined) {
+      StringValue.encode(
+        { value: message.legacyReference! },
+        writer.uint32(82).fork()
       ).ldelim();
     }
     return writer;
@@ -1081,6 +1090,12 @@ export const Tariff = {
         case 9:
           message.features = TariffFeatures.decode(reader, reader.uint32());
           break;
+        case 10:
+          message.legacyReference = StringValue.decode(
+            reader,
+            reader.uint32()
+          ).value;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1114,6 +1129,9 @@ export const Tariff = {
       features: isSet(object.features)
         ? TariffFeatures.fromJSON(object.features)
         : undefined,
+      legacyReference: isSet(object.legacyReference)
+        ? String(object.legacyReference)
+        : undefined,
     };
   },
 
@@ -1142,6 +1160,8 @@ export const Tariff = {
       (obj.features = message.features
         ? TariffFeatures.toJSON(message.features)
         : undefined);
+    message.legacyReference !== undefined &&
+      (obj.legacyReference = message.legacyReference);
     return obj;
   },
 
@@ -1159,6 +1179,7 @@ export const Tariff = {
       object.features !== undefined && object.features !== null
         ? TariffFeatures.fromPartial(object.features)
         : undefined;
+    message.legacyReference = object.legacyReference ?? undefined;
     return message;
   },
 };
@@ -2109,8 +2130,6 @@ function fromJsonTimestamp(o: any): Date {
   }
 }
 
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();

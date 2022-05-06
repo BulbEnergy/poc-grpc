@@ -7,7 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "@grpc/grpc-js": "^1.6.7",
-    "@grpc/proto-loader": "^0.6.10",
+    "@types/long": "^4.0.2",
     "@types/node": "^17.0.31",
     "async": "^3.2.3",
     "grpc-health-check": "^1.8.0",
@@ -24,12 +24,12 @@
     "prettier": "^2.6.2"
   },
   "scripts": {
-    "start": "yarn ts-node .",
-    "build": "yarn clean && tsc -p tsconfig.json",
     "clean": "rm -rf ./lib",
-    "lint": "eslint --cache '{src}/**/*.{ts,js}'",
-    "format": "prettier --write '{src}/**/*.{ts,js}'",
-    "prettier": "prettier --list-different '{src}/**/*.{ts,js}'",
-    "grpc": "yarn grpc_tools_node_protoc --ts_proto_out=. --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_opt=outputServices=grpc-js --proto_path ../../../protos ../../../protos/tariff.proto"
+    "build": "yarn clean && tsc -p tsconfig.json",
+    "start": "yarn build && yarn ts-node .",
+    "lint": "eslint --cache 'src/**/*.ts'",
+    "format": "prettier --write 'src/**/*.ts'",
+    "prettier": "prettier --list-different 'src/**/*.ts'",
+    "proto": "yarn grpc_tools_node_protoc --ts_proto_out=./generated --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_opt=outputServices=grpc-js --ts_proto_opt=esModuleInterop=true --proto_path ../../../protos ../../../protos/tariff.proto"
   }
 }

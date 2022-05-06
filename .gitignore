@@ -135,5 +135,8 @@ node_modules/
 lib/
 *.tsbuildinfo
 typings/
+*.js
+
 # macos
 .DS_Store
+
