@@ -13,6 +13,7 @@ import {
 } from '../generated/tariff';
 import { exit } from 'process';
 import { randomUUID } from 'crypto';
+import { time } from 'console';
 
 /**
  * Create a channel to the Tariff Service server
@@ -152,7 +153,7 @@ async function* generatePriceChangeTariffPricePack(
 async function streamUpdateRatesForPriceChange(): Promise<void> {
   console.time('stream_update');
   await client.streamUpdateRatesForPriceChange(
-    await generatePriceChangeTariffPricePack(10),
+    generatePriceChangeTariffPricePack(10),
   );
   console.timeEnd('stream_update');
 }
