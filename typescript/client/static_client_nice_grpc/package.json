@@ -6,6 +6,7 @@
   "author": "Alan Lau",
   "license": "MIT",
   "dependencies": {
+    "@bulb/server-common": "^1.10.0",
     "@grpc/grpc-js": "^1.6.7",
     "@types/long": "^4.0.2",
     "@types/node": "^17.0.31",
@@ -21,7 +22,7 @@
   },
   "devDependencies": {
     "@bulb/eslint-config-bulb": "^3.1.0",
-    "eslint": "^8.14.0",
+    "eslint": "^8.15.0",
     "nodemon": "^2.0.16",
     "prettier": "^2.6.2"
   },
@@ -29,7 +30,7 @@
     "clean": "rm -rf ./lib",
     "build": "yarn clean && tsc -p tsconfig.json",
     "start": "yarn build && yarn ts-node .",
-    "lint": "eslint --cache 'src/**/*.ts'",
+    "lint": "eslint 'src/**/*.ts'",
     "format": "prettier --write 'src/**/*.ts'",
     "prettier": "prettier --list-different 'src/**/*.ts'",
     "proto": "yarn grpc_tools_node_protoc --ts_proto_out=./generated --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_opt=outputServices=nice-grpc,outputServices=generic-definitions,useExactTypes=false --ts_proto_opt=esModuleInterop=true --proto_path ../../../protos ../../../protos/tariff.proto"

@@ -6,7 +6,8 @@ This repo contains:
 - A [tariff service protobuf](./protos/tariff.proto) based on the features visible on the [Tariff UI tool wireframe](https://bulbenergy.atlassian.net/wiki/spaces/BENG/pages/2384232678/Tariff+UI+tool).
 - A Python gRPC server implementation of `tariff.proto` in `tariff_server/`
 - A Python gRPC stub (client) implementation of `tariff.proto` in `tariff_client/`
-- A Typescript gRPC stub (client) implementation of `tariff.proto` in [`typescript/client/static_client`](./typescript/client/static_client)
+- A Typescript gRPC stub (client) implementation of `tariff.proto` in [`typescript/client/static_client`](./typescript/client/static_client) using `ts-proto` and `grpc-js`
+- A Typescript gRPC stub (client) implementation of `tariff.proto` in [`typescript/client/static_client`](./typescript/client/static_client) using `ts-proto` and `nice-grpc`
 
 # Develop (Python)
 
