@@ -135,8 +135,13 @@ node_modules/
 lib/
 *.tsbuildinfo
 typings/
+
 *.js
+!*.config.js
+
 
 # macos
 .DS_Store
 
+# vim
+*.swp
