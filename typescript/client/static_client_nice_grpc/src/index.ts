@@ -72,7 +72,7 @@ async function listAllTariffsInATryCatchWay(): Promise<Tariff[] | void> {
 async function getTariffById(tariffId: string) {
   console.info('\n=====> Get tariff by id');
   try {
-    await client.getTariff({ tariffId: tariffId } as GetTariffRequest);
+    await client.getTariff({ tariffId: tariffId });
   } catch (error: unknown) {
     handleError(error);
   }
