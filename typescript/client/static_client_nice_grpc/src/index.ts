@@ -1,10 +1,9 @@
-import { ClientError, createChannel, createClient, Metadata } from 'nice-grpc';
+import {ClientError, ClientMiddlewareCall, createChannel, createClient, createClientFactory, Metadata} from 'nice-grpc';
 import { credentials } from '@grpc/grpc-js';
 import {
   DeepPartial,
   FuelType,
   GetRatesForTariffRequest,
-  GetTariffRequest,
   ListTariffsRequest,
   PriceChangeTariffPricePack,
   Tariff,
@@ -13,18 +12,21 @@ import {
 } from '../generated/tariff';
 import { exit } from 'process';
 import { randomUUID } from 'crypto';
-import { time } from 'console';
+import {delay} from "rxjs";
+import setSystemTime = jest.setSystemTime;
+import {ifError} from "assert";
+import {addAbortSignal} from "stream";
 
 /**
  * Create a channel to the Tariff Service server
  */
 const channel = createChannel('127.0.0.1:50051', credentials.createInsecure(), {
   // example configurations
-  'grpc.keepalive_time_ms': 120000,
-  'grpc.http2.min_time_between_pings_ms': 120000,
-  'grpc.keepalive_timeout_ms': 20000,
-  'grpc.http2.max_pings_without_data': 0,
-  'grpc.keepalive_permit_without_calls': 1,
+  // 'grpc.keepalive_time_ms': 120000,
+  // 'grpc.http2.min_time_between_pings_ms': 120000,
+  // 'grpc.keepalive_timeout_ms': 20000,
+  // 'grpc.http2.max_pings_without_data': 0,
+  // 'grpc.keepalive_permit_without_calls': 1,
 });
 
 function handleError(error: unknown) {
@@ -174,6 +176,22 @@ async function streamUpdateRatesForPriceChange(): Promise<void> {
   await streamUpdateRatesForPriceChange();
 
   // clean up
-  // channel.close();
+  // TODO: Python server throws this after calling client streaming function
+  //  Maybe we missed something about closing the stream somewhere?
+  //  Also tried waiting for 10 seconds with:
+  //  await new Promise(resolve => setTimeout(resolve, 10000));
+  // Fatal error: protocol.data_received() call failed.
+  // protocol: <grpclib.protocol.H2Protocol object at 0x10dc91ed0>
+  // transport: <_SelectorSocketTransport closing fd=7 read=idle write=<idle, bufsize=0>>
+  // Traceback (most recent call last):
+  //   File "/Users/alanlau/.pyenv/versions/3.10.1/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/asyncio/selector_events.py", line 870, in _read_ready__data_received
+  //     self._protocol.data_received(data)
+  //   File "/Users/alanlau/Library/Caches/pypoetry/virtualenvs/tariff-server-UZTV9Bb3-py3.10/lib/python3.10/site-packages/grpclib/protocol.py", line 719, in data_received
+  //     self.processor.process(event)
+  //   File "/Users/alanlau/Library/Caches/pypoetry/virtualenvs/tariff-server-UZTV9Bb3-py3.10/lib/python3.10/site-packages/grpclib/protocol.py", line 564, in process
+  //     proc = self.processors[event.__class__]
+  // AttributeError: 'EventsProcessor' object has no attribute 'processors'
+
+  channel.close();
   exit();
 })();
