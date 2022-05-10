@@ -1,0 +1,43 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "TypeScript gRPC client",
+  "main": "src/index.js",
+  "author": "Alan Lau",
+  "license": "MIT",
+  "dependencies": {
+    "@bulb/server-common": "^1.10.0",
+    "@grpc/grpc-js": "^1.6.7",
+    "@types/long": "^4.0.2",
+    "@types/node": "^17.0.31",
+    "async": "^3.2.3",
+    "grpc-health-check": "^1.8.0",
+    "grpc-tools": "^1.11.2",
+    "long": "^5.2.0",
+    "nice-grpc": "^1.2.0",
+    "rxjs": "^7.5.5",
+    "ts-jest": "^28.0.2",
+    "ts-node": "^10.7.0",
+    "ts-proto": "^1.112.0",
+    "typescript": "^4.6.4"
+  },
+  "devDependencies": {
+    "@bulb/eslint-config-bulb": "^3.1.0",
+    "@types/jest": "^27.5.0",
+    "eslint": "^8.15.0",
+    "jest": "^28.1.0",
+    "jest-watch-typeahead": "^1.1.0",
+    "nodemon": "^2.0.16",
+    "prettier": "^2.6.2"
+  },
+  "scripts": {
+    "clean": "rm -rf ./lib",
+    "build": "yarn clean && tsc -p tsconfig.json",
+    "test": "yarn build && jest",
+    "start": "yarn build && yarn ts-node .",
+    "lint": "eslint 'src/**/*.ts'",
+    "format": "prettier --write 'src/**/*.ts'",
+    "prettier": "prettier --list-different 'src/**/*.ts'",
+    "proto": "yarn grpc_tools_node_protoc --ts_proto_out=./generated --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_opt=outputServices=nice-grpc,outputServices=generic-definitions,useExactTypes=false --ts_proto_opt=esModuleInterop=true --proto_path ../../../protos ../../../protos/tariff.proto"
+  }
+}
