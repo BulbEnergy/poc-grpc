@@ -1,4 +1,11 @@
-import {ClientError, ClientMiddlewareCall, createChannel, createClient, createClientFactory, Metadata} from 'nice-grpc';
+import {
+  ClientError,
+  ClientMiddlewareCall,
+  createChannel,
+  createClient,
+  createClientFactory,
+  Metadata,
+} from 'nice-grpc';
 import { credentials } from '@grpc/grpc-js';
 import {
   DeepPartial,
@@ -12,10 +19,10 @@ import {
 } from '../generated/tariff';
 import { exit } from 'process';
 import { randomUUID } from 'crypto';
-import {delay} from "rxjs";
+import { delay } from 'rxjs';
 import setSystemTime = jest.setSystemTime;
-import {ifError} from "assert";
-import {addAbortSignal} from "stream";
+import { ifError } from 'assert';
+import { addAbortSignal } from 'stream';
 
 /**
  * Create a channel to the Tariff Service server
