@@ -164,7 +164,7 @@ class TariffService(TariffServiceBase):
             tariff = TARIFFS[tariff_id]
         except KeyError:
             raise grpclib.GRPCError(
-                message=f"Cannot find tariff {id}",
+                message=f"Cannot find tariff {tariff_id}",
                 status=grpclib.const.Status.NOT_FOUND,
             )
         rate_start_times = tariff.features.rate_start_times or ["00:00"]
