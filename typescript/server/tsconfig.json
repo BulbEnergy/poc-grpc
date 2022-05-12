@@ -13,8 +13,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
 //    "noEmit": true,
+    "outDir": "lib",
     "typeRoots": ["node_modules/@types", "@types"],
-    "noFallthroughCasesInSwitch": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["./src/**/*.ts", "@types", "./generated/**/*.ts"],
   "exclude": ["node_modules"],

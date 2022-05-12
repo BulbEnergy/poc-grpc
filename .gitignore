@@ -131,8 +131,8 @@ dmypy.json
 .idea/
 
 # node / typescript
+# "lib/" defined above
 node_modules/
-lib/
 *.tsbuildinfo
 typings/
 
