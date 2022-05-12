@@ -616,9 +616,9 @@
   integrity sha512-GryiOJmNcWbovBxTfZSF71V/mXbgcV3MewDe3kIMCLyIh5e7SKAeUZs+rMnJ8jkMolZ/4/VsdBmMrw3l+VdZ3w==
 
 "@jridgewell/trace-mapping@^0.3.7", "@jridgewell/trace-mapping@^0.3.9":
-  version "0.3.11"
-  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/@jridgewell/trace-mapping/-/trace-mapping-0.3.11.tgz#eb2e124521f27673493030d02dffedf60e56553f"
-  integrity sha512-RllI476aSMsxzeI9TtlSMoNTgHDxEmnl6GkkHwhr0vdL8W+0WuesyI8Vd3rBOfrwtPXbPxdT9ADJdiOKgzxPQA==
+  version "0.3.13"
+  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/@jridgewell/trace-mapping/-/trace-mapping-0.3.13.tgz#dcfe3e95f224c8fe97a87a5235defec999aa92ea"
+  integrity sha512-o1xbKhp9qnIAoHJSWd6KlCZfqslL4valSF81H8ImioOAxluWYWOpWkpyktY2vnt4tbrX9XYaxovq6cgowaJp2w==
   dependencies:
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
@@ -795,6 +795,11 @@
   dependencies:
     get-port "*"
 
+"@types/google-protobuf@^3.7.4":
+  version "3.15.6"
+  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/@types/google-protobuf/-/google-protobuf-3.15.6.tgz#674a69493ef2c849b95eafe69167ea59079eb504"
+  integrity sha512-pYVNNJ+winC4aek+lZp93sIKxnXt5qMkuKmaqS3WGuTq0Bw1ZDYNBgzG5kkdtwcv+GmYJGo3yEg6z2cKKAiEdw==
+
 "@types/graceful-fs@^4.1.3":
   version "4.1.5"
   resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/@types/graceful-fs/-/graceful-fs-4.1.5.tgz#21ffba0d98da4350db64891f92a9e5db3cdb4e15"
@@ -822,9 +827,9 @@
     "@types/istanbul-lib-report" "*"
 
 "@types/jest@^27.5.0":
-  version "27.5.0"
-  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/@types/jest/-/jest-27.5.0.tgz#e04ed1824ca6b1dd0438997ba60f99a7405d4c7b"
-  integrity sha512-9RBFx7r4k+msyj/arpfaa0WOOEcaAZNmN+j80KFbFCoSqCJGHTz7YMAMGQW9Xmqm5w6l5c25vbSjMwlikJi5+g==
+  version "27.5.1"
+  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/@types/jest/-/jest-27.5.1.tgz#2c8b6dc6ff85c33bcd07d0b62cb3d19ddfdb3ab9"
+  integrity sha512-fUy7YRpT+rHXto1YlL+J9rs0uLGyiqVt3ZOTQR+4ROc47yNl8WLdVLgUloBRhOxP1PZvguHl44T3H0wAWxahYQ==
   dependencies:
     jest-matcher-utils "^27.0.0"
     pretty-format "^27.0.0"
@@ -845,9 +850,9 @@
   integrity sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==
 
 "@types/node@*", "@types/node@>=12.12.47", "@types/node@>=13.7.0", "@types/node@^17.0.31":
-  version "17.0.31"
-  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/@types/node/-/node-17.0.31.tgz#a5bb84ecfa27eec5e1c802c6bbf8139bdb163a5d"
-  integrity sha512-AR0x5HbXGqkEx9CadRH3EBYx/VkiUgZIhP4wvPn/+5KIsgpNoyFaRlVe0Zlx9gRtg8fA06a9tskE2MSN7TcG4Q==
+  version "17.0.32"
+  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/@types/node/-/node-17.0.32.tgz#51d59d7a90ef2d0ae961791e0900cad2393a0149"
+  integrity sha512-eAIcfAvhf/BkHcf4pkLJ7ECpBAhh9kcxRBpip9cTiO+hf+aJrsxYxBeS6OXvOd9WqNAJmavXVpZvY1rBjNsXmw==
 
 "@types/object-hash@^1.3.0":
   version "1.3.4"
@@ -1306,9 +1311,9 @@ camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001332:
-  version "1.0.30001339"
-  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/caniuse-lite/-/caniuse-lite-1.0.30001339.tgz#f9aece4ea8156071613b27791547ba0b33f176cf"
-  integrity sha512-Es8PiVqCe+uXdms0Gu5xP5PF2bxLR7OBp3wUzUnuO7OHzhOfCyg3hdiGWVPVxhiuniOzng+hTc1u3fEQ0TlkSQ==
+  version "1.0.30001340"
+  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/caniuse-lite/-/caniuse-lite-1.0.30001340.tgz#029a2f8bfc025d4820fafbfaa6259fd7778340c7"
+  integrity sha512-jUNz+a9blQTQVu4uFcn17uAD8IDizPzQkIKh3LCJfg9BkyIqExYYdyc/ZSlWUSKb8iYiXxKsxbv4zYSvkqjrxw==
 
 chalk@^2.0.0:
   version "2.4.2"
@@ -1363,9 +1368,9 @@ ci-info@^2.0.0:
   integrity sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
 
 ci-info@^3.2.0:
-  version "3.3.0"
-  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/ci-info/-/ci-info-3.3.0.tgz#b4ed1fb6818dea4803a55c623041f9165d2066b2"
-  integrity sha512-riT/3vI5YpVH6/qomlDnJow6TBee2PBKSEpx3O32EGPYbWGIRsIlGRms3Sm74wYE1JMo8RnO04Hb12+v1J5ICw==
+  version "3.3.1"
+  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/ci-info/-/ci-info-3.3.1.tgz#58331f6f472a25fe3a50a351ae3052936c2c7f32"
+  integrity sha512-SXgeMX9VwDe7iFFaEWkA5AstuER9YKqy4EhHqr4DVqkwmD9rpVimkMKWHdjn30Ja45txyjhSn63lVX69eVCckg==
 
 cjs-module-lexer@^1.0.0:
   version "1.2.2"
@@ -2250,13 +2255,13 @@ globals@^11.1.0:
   integrity sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==
 
 globals@^13.6.0, globals@^13.9.0:
-  version "13.14.0"
-  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/globals/-/globals-13.14.0.tgz#daf3ff9b4336527cf56e98330b6f64bea9aff9df"
-  integrity sha512-ERO68sOYwm5UuLvSJTY7w7NP2c8S4UcXs3X1GBX8cwOr+ShOcDBbCY5mH4zxz0jsYCdJ8ve8Mv9n2YGJMB1aeg==
+  version "13.15.0"
+  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/globals/-/globals-13.15.0.tgz#38113218c907d2f7e98658af246cef8b77e90bac"
+  integrity sha512-bpzcOlgDhMG070Av0Vy5Owklpv1I6+j96GhUI7Rh7IzDCKLzboflLrrfqMu8NquDbiR4EOQk7XzJwqVJxicxog==
   dependencies:
     type-fest "^0.20.2"
 
-google-protobuf@^3.4.0:
+google-protobuf@^3.15.6, google-protobuf@^3.4.0:
   version "3.20.1"
   resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/google-protobuf/-/google-protobuf-3.20.1.tgz#1b255c2b59bcda7c399df46c65206aa3c7a0ce8b"
   integrity sha512-XMf1+O32FjYIV3CYu6Tuh5PNbfNEU5Xu22X+Xkdb/DUexFlCzhvv7d5Iirm4AOwn8lv4al1YvIhzGrg2j9Zfzw==
@@ -3395,6 +3400,16 @@ nice-grpc-server-health@^1.1.0:
     nice-grpc "^1.2.0"
     typed-emitter "^2.0.0"
 
+nice-grpc-server-reflection@^1.0.12:
+  version "1.0.12"
+  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/nice-grpc-server-reflection/-/nice-grpc-server-reflection-1.0.12.tgz#3802a1c57765d66fba3a2f4c5383f6d644ba2c39"
+  integrity sha512-2OrD7OGHmURnixmQ+3AoQWUzXB86+1qXmiRYLe4XgQIHg/cuw8MgQXUy/+wf4AVzXzkHOPeHDfnPEpZ62aHnmQ==
+  dependencies:
+    "@grpc/grpc-js" "^1.6.1"
+    "@types/google-protobuf" "^3.7.4"
+    google-protobuf "^3.15.6"
+    nice-grpc "^1.2.0"
+
 nice-grpc@^1.2.0:
   version "1.2.0"
   resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/nice-grpc/-/nice-grpc-1.2.0.tgz#43b7cbf373c9bab8c21080c2c3bcd181ee9e9645"
@@ -4411,7 +4426,7 @@ type-fest@^0.21.3:
 
 typed-emitter@^2.0.0:
   version "2.1.0"
-  resolved "https://registry.yarnpkg.com/typed-emitter/-/typed-emitter-2.1.0.tgz#ca78e3d8ef1476f228f548d62e04e3d4d3fd77fb"
+  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/typed-emitter/-/typed-emitter-2.1.0.tgz#ca78e3d8ef1476f228f548d62e04e3d4d3fd77fb"
   integrity sha512-g/KzbYKbH5C2vPkaXGu8DJlHrGKHLsM25Zg9WuC9pMGfuvT+X25tZQWo5fK1BjBm8+UrVE9LDCvaY0CQk+fXDA==
   optionalDependencies:
     rxjs "^7.5.2"
@@ -4654,9 +4669,9 @@ yargs@^16.2.0:
     yargs-parser "^20.2.2"
 
 yargs@^17.3.1:
-  version "17.4.1"
-  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/yargs/-/yargs-17.4.1.tgz#ebe23284207bb75cee7c408c33e722bfb27b5284"
-  integrity sha512-WSZD9jgobAg3ZKuCQZSa3g9QOJeCCqLoLAykiWgmXnDo9EPnn4RPf5qVTtzgOx66o6/oqhcA5tHtJXpG8pMt3g==
+  version "17.5.0"
+  resolved "https://bulbenergy.jfrog.io/bulbenergy/api/npm/npm/yargs/-/yargs-17.5.0.tgz#2706c5431f8c119002a2b106fc9f58b9bb9097a3"
+  integrity sha512-3sLxVhbAB5OC8qvVRebCLWuouhwh/rswsiDYx3WGxajUk/l4G20SKfrKKFeNIHboUFt2JFgv2yfn+5cgOr/t5A==
   dependencies:
     cliui "^7.0.2"
     escalade "^3.1.1"
