@@ -2,7 +2,7 @@
   "name": "client",
   "version": "1.0.0",
   "description": "TypeScript gRPC client",
-  "main": "src/index.js",
+  "main": "lib/src/index.js",
   "author": "Alan Lau",
   "license": "MIT",
   "dependencies": {
