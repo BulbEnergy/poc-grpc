@@ -71,6 +71,8 @@ const PRICE_CHANGE_DATETIMES = [
 
 /**
  * Server implementation
+ * - Errors are thrown using "ServerError" class
+ * - Responses are automatically wrapped in DeepPartial
  */
 export const tariffServiceImpl: TariffServiceServiceImplementation = {
   async batchGetTariffs(
@@ -132,6 +134,9 @@ export const tariffServiceImpl: TariffServiceServiceImplementation = {
     return { tariffs: Object.values(TARIFFS) };
   },
 
+  /**
+   * Server stream method yields results as an async iterator
+   */
   async *streamRatesForTariff(
     request: GetRatesForTariffRequest,
     context: CallContext,

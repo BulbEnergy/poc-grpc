@@ -13,7 +13,13 @@ import {
 import { tariffServiceImpl } from '../server';
 // import getPort from 'get-port'
 
-describe('test suite', () => {
+/**
+ * Very basic test to show how it might be done
+ *
+ * Unlike grpclib in Python's betterproto library, there isn't a simple way to run a server in memory for tests
+ * See: repo/
+ */
+describe('gRPC server-client tests', () => {
   let testServer: Server;
   let testClient: TariffServiceClient;
   let testChannel: Channel;
@@ -42,7 +48,7 @@ describe('test suite', () => {
     await testServer.shutdown();
   });
 
-  test('list tariffs return 2 tariffs', async () => {
+  test('listTariffs returns 2 tariffs', async () => {
     console.log('in test');
     const tariffs = await testClient.listTariffs({});
     expect(tariffs.tariffs.length).toBe(2);

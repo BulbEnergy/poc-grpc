@@ -1,6 +1,10 @@
 import { ServerMiddlewareCall } from 'nice-grpc';
 import { CallContext } from 'nice-grpc-common';
 
+/**
+ * This is an example middleware that "intercepts" a request
+ * and does something with the content
+ */
 export async function* metadataMiddleware<Request, Response>(
   call: ServerMiddlewareCall<Request, Response>,
   context: CallContext,
@@ -13,7 +17,7 @@ export async function* metadataMiddleware<Request, Response>(
   console.log(
     `Client calling '${path}'.`,
     `Incoming metadata has "token"?: '${hasToken}'.`,
-    hasToken ? `Token: '${context.metadata.get('token')}'.` : "",
+    hasToken ? `Token: '${token}'.` : "",
     `Incoming metadata has "correlation_id"?: '${hasCorrelationId}'`,
     hasCorrelationId ? `correlation_id: '${correlationId}'.`: "",
   );
