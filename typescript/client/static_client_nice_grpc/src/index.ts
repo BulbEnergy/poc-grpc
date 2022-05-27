@@ -1,9 +1,7 @@
 import {
   ClientError,
-  ClientMiddlewareCall,
   createChannel,
   createClient,
-  createClientFactory,
   Metadata,
 } from 'nice-grpc';
 import { credentials } from '@grpc/grpc-js';
@@ -19,22 +17,20 @@ import {
 } from '../generated/tariff';
 import { exit } from 'process';
 import { randomUUID } from 'crypto';
-import { delay } from 'rxjs';
-import setSystemTime = jest.setSystemTime;
-import { ifError } from 'assert';
-import { addAbortSignal } from 'stream';
 
 /**
  * Create a channel to the Tariff Service server
  */
-const channel = createChannel('127.0.0.1:50051', credentials.createInsecure(), {
+const channel = createChannel('127.0.0.1:50051', credentials.createInsecure(),
+  //{
   // example configurations
   // 'grpc.keepalive_time_ms': 120000,
   // 'grpc.http2.min_time_between_pings_ms': 120000,
   // 'grpc.keepalive_timeout_ms': 20000,
   // 'grpc.http2.max_pings_without_data': 0,
   // 'grpc.keepalive_permit_without_calls': 1,
-});
+//}
+);
 
 function handleError(error: unknown) {
   if (error instanceof ClientError) {

@@ -10,16 +10,16 @@ export async function* metadataMiddleware<Request, Response>(
   context: CallContext,
 ) {
   const { path } = call.method;
-  const hasToken = context.metadata.has("token");
-  const token = context.metadata.get("token");
-  const hasCorrelationId = context.metadata.has("correlation_id");
-  const correlationId = context.metadata.get("correlation_id");
+  const hasToken = context.metadata.has('token');
+  const token = context.metadata.get('token');
+  const hasCorrelationId = context.metadata.has('correlation_id');
+  const correlationId = context.metadata.get('correlation_id');
   console.log(
     `Client calling '${path}'.`,
     `Incoming metadata has "token"?: '${hasToken}'.`,
-    hasToken ? `Token: '${token}'.` : "",
+    hasToken ? `Token: '${token}'.` : '',
     `Incoming metadata has "correlation_id"?: '${hasCorrelationId}'`,
-    hasCorrelationId ? `correlation_id: '${correlationId}'.`: "",
+    hasCorrelationId ? `correlation_id: '${correlationId}'.` : '',
   );
 
   if (!call.responseStream) {

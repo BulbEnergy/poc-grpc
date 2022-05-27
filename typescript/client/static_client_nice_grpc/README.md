@@ -1,14 +1,14 @@
-# nice-grpc Client
+# grpc-js Client
 
 Libraries:
 - [`ts-proto`](https://github.com/stephenh/ts-proto)
-- [`grpc-js`](https://www.npmjs.com/package/@grpc/grpc-js)
+- [`nice-grpc`](https://github.com/deeplay-io/nice-grpc)
 
 See [typescript/README.md](../README.md) for more details on these packages
 
 ## Code Generation
 
-We use the official [`grpc-tools`](https://github.com/grpc/grpc-node/tree/master/packages/grpc-tools) package (which is a yarn package that wraps around the official `protoc` protobuf compiler) with the [`ts-proto`](https://github.com/stephenh/ts-proto) plugin, generating code that runs the `nice-grpc` gRPC implementation. This allows us to generate native Typescript types for use based on a given protobuf.
+We use the official [`grpc-tools`](https://github.com/grpc/grpc-node/tree/master/packages/grpc-tools) package (which is a yarn package that wraps around the official `protoc` protobuf compiler) with the [`ts-proto`](https://github.com/stephenh/ts-proto) plugin, generating code that runs the official `grpc-js` gRPC implementation. This allows us to generate native Typescript types for use based on a given protobuf.
 
 The `yarn proto` command is mapped to:
 
@@ -16,17 +16,7 @@ The `yarn proto` command is mapped to:
 yarn grpc_tools_node_protoc \
 --ts_proto_out=./generated \
 --plugin=./node_modules/.bin/protoc-gen-ts_proto \
---ts_proto_opt=outputServices=grpc-js,esModuleInterop=true \
---proto_path ../../../protos \
-../../../protos/tariff.proto
-```
-
-
-Although not implemented, `yarn proto:google` is mapped to the following to demonstrate how it looks like when using `protoc` without any plugins:
-```bash
-yarn grpc_tools_node_protoc \
---js_out=import_style=commonjs,binary:./google_generated \
---grpc_out=grpc_js:./google_generated \
+--ts_proto_opt=outputServices=nice-grpc,outputServices=generic-definitions,useExactTypes=false,esModuleInterop=true \
 --proto_path ../../../protos \
 ../../../protos/tariff.proto
 ```
